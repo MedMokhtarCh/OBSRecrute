@@ -15,3 +15,10 @@ export const isAuthenticated = catchAsyncErrors(async (req, res, next) => {
 
   next();
 });
+
+export const isAdmin = (req, res, next) => {
+  if (req.user.role !== "Admin") {
+    return next(new ErrorHandler("Access denied: Admins only", 403));
+  }
+  next();
+};
