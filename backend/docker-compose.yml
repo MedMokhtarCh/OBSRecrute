@@ -1,0 +1,71 @@
+
+services:
+  user-service:
+    build:
+      context: ./services/user-service  # Chemin vers le dossier contenant le service user
+      dockerfile: Dockerfile            # Assurez-vous que ce fichier Dockerfile existe
+    container_name: user-service
+    ports:
+      - "4001:4001"
+    restart: always
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/Recrutement_Plateforme
+    volumes:
+      - ./services/user-service:/app  # Lien du dossier local vers le conteneur
+     
+    command: ["npm", "run", "dev"]      # Lancement du service avec npm run dev
+
+  application-service:
+    build:
+      context: ./services/application-service  # Chemin vers le dossier contenant le service user
+      dockerfile: Dockerfile            # Assurez-vous que ce fichier Dockerfile existe
+    container_name: application-service
+    ports:
+      - "4003:4003"
+    restart: always
+    volumes:
+      - ./services/application-service:/app  # Lien du dossier local vers le conteneur
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/ApplicationDB
+   
+    command: ["npm", "run", "dev"]      # Lancement du service avec npm run dev
+  job-service:
+    build:
+      context: ./services/job-service  # Chemin vers le dossier contenant le service job
+      dockerfile: Dockerfile            # Assurez-vous que ce fichier Dockerfile existe
+    container_name: job-service
+    ports:
+      - "4002:4002"
+    restart: always
+    volumes:
+      - ./services/job-service:/app  # Lien du dossier local vers le conteneur
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/Job_DB
+    command: ["npm", "run", "dev"]      # Lancement du service avec npm run dev  
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"  # Expose MongoDB on port 27017
+    volumes:
+      - mongo_data:/data/db  # Persist MongoDB data
+    restart: always    
+
+volumes:
+  rabbitmq_data:
+  mongo_data:
