@@ -1,47 +1,51 @@
-
 services:
   user-service:
     build:
-      context: ./services/user-service  # Chemin vers le dossier contenant le service user
-      dockerfile: Dockerfile            # Assurez-vous que ce fichier Dockerfile existe
+      context: ./services/user-service
+      dockerfile: Dockerfile
     container_name: user-service
     ports:
       - "4001:4001"
     restart: always
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/Recrutement_Plateforme
+
     volumes:
-      - ./services/user-service:/app  # Lien du dossier local vers le conteneur
-     
-    command: ["npm", "run", "dev"]      # Lancement du service avec npm run dev
+      - ./services/user-service:/app
+    command: ["npm", "run", "dev"]
+    depends_on:
+      - mongo
+      - rabbitmq
 
   application-service:
     build:
-      context: ./services/application-service  # Chemin vers le dossier contenant le service user
-      dockerfile: Dockerfile            # Assurez-vous que ce fichier Dockerfile existe
+      context: ./services/application-service
+      dockerfile: Dockerfile
     container_name: application-service
     ports:
       - "4003:4003"
     restart: always
     volumes:
-      - ./services/application-service:/app  # Lien du dossier local vers le conteneur
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/ApplicationDB
-   
-    command: ["npm", "run", "dev"]      # Lancement du service avec npm run dev
+      - ./services/application-service:/app
+    
+    command: ["npm", "run", "dev"]
+    depends_on:
+      - mongo
+      - rabbitmq
+
   job-service:
     build:
-      context: ./services/job-service  # Chemin vers le dossier contenant le service job
-      dockerfile: Dockerfile            # Assurez-vous que ce fichier Dockerfile existe
+      context: ./services/job-service
+      dockerfile: Dockerfile
     container_name: job-service
     ports:
       - "4002:4002"
     restart: always
     volumes:
-      - ./services/job-service:/app  # Lien du dossier local vers le conteneur
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/Job_DB
-    command: ["npm", "run", "dev"]      # Lancement du service avec npm run dev  
+      - ./services/job-service:/app
+    
+    command: ["npm", "run", "dev"]
+    depends_on:
+      - mongo
+      - rabbitmq
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -56,15 +60,14 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
 
-
   mongo:
     image: mongo
     container_name: mongo
     ports:
-      - "27017:27017"  # Expose MongoDB on port 27017
+      - "27017:27017"
     volumes:
-      - mongo_data:/data/db  # Persist MongoDB data
-    restart: always    
+      - mongo_data:/data/db
+    restart: always
 
 volumes:
   rabbitmq_data:

@@ -22,8 +22,9 @@ app.use(
 );
 app.use(express.json());
 
-app.use("/User-service", proxy("http://localhost:4001"));
-
+app.use("/user-service", proxy("http://localhost:4001"));
+app.use("/job-service", proxy("http://localhost:4002"));
+app.use("/application-service", proxy("http://localhost:4003"));
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).send("Something went wrong!");
