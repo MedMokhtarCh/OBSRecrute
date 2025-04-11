@@ -4,6 +4,7 @@ import {
   jobSeekerGetAllApplication,
   postApplication,
   updateApplicationStatus,
+  getApplicationsByJobId,
 } from "../Controllers/ApplicationController.js";
 import { isAuthenticated, isAuthorized } from "../Middlewares/Authen.js";
 import express from "express";
@@ -30,6 +31,12 @@ router.get(
   jobSeekerGetAllApplication
 );
 
+router.get(
+  "/applications/job/:jobId",
+  isAuthenticated,
+  isAuthorized("Employer", "Job Seeker"),
+  getApplicationsByJobId
+);
 router.delete("/delete/:id", isAuthenticated, deleteApplication);
 
 router.patch(

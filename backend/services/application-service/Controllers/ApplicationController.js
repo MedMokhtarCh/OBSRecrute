@@ -221,6 +221,24 @@ export const deleteApplication = catchAsyncErrors(async (req, res, next) => {
     message: "Application deleted successfully.",
   });
 });
+export const getApplicationsByJobId = catchAsyncErrors(
+  async (req, res, next) => {
+    const { jobId } = req.params;
+
+    // Chercher toutes les candidatures pour ce jobId
+    const applications = await Application.find({ "jobInfo.jobId": jobId });
+
+    // Si aucune candidature n'est trouvée
+    if (!applications || applications.length === 0) {
+      return next(new ErrorHandler("No applications found for this job.", 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      applications,
+    });
+  }
+);
 
 export const updateApplicationStatus = catchAsyncErrors(
   async (req, res, next) => {
