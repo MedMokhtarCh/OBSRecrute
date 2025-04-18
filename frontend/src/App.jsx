@@ -28,6 +28,7 @@ import JobDetailsDashboard from './Components/JobdetailsDashboard';
 import './App.css';
 import ForgotPassword from './Components/ForgotPassword';
 import ResetPassword from './Components/ResetPassword';
+import FavoriteJobs from './Pages/FavoriteJobs';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/jobs' element={<Jobs />} />
+          <Route path='/favoriteJobs' element={<FavoriteJobs />} />
           <Route path='/post/application/:jobId' element={<PostApplication />} />
           <Route path='/jobDetails/:jobId' element={<JobDetails />} />
           <Route path='/EditJob/:jobId' element={<JobEdit />} />

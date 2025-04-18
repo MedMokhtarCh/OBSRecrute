@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaSun, FaMoon } from "react-icons/fa";
 import logo from "../assets/logo1.png";
-
+import { MdFavorite } from "react-icons/md";
 const Navbar = () => {
   const [show, setShow] = useState(false);
   const [theme, setTheme] = useState("light");
@@ -21,8 +21,18 @@ const Navbar = () => {
         <ul>
           <li><Link to="/" onClick={() => setShow(false)}>Home</Link></li>
           {((isAuthenticated && user.role === "Job Seeker") || !isAuthenticated) && (
-            <li><Link to="/jobs" onClick={() => setShow(false)}>Jobs</Link></li>
-          )}
+  <>
+ <li>
+  <Link to="/favoriteJobs" onClick={() => setShow(false)} style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+    My <MdFavorite color="red" /> Jobs
+  </Link>
+</li>
+
+    <li><Link to="/jobs" onClick={() => setShow(false)}>Jobs</Link></li>
+    
+  </>
+)}
+
           {isAuthenticated ? (
             <li><Link to="/dashboard" onClick={() => setShow(false)}>Dashboard</Link></li>
           ) : (
