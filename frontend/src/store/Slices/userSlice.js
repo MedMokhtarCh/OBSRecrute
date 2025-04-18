@@ -5,7 +5,9 @@ const userSlice = createSlice({
   initialState: {
     loading: false,
     isAuthenticated: false,
-    user: {},
+    user: {
+      favorites: [], // Initialize the favorites array here
+    },
     error: null,
     message: null,
   },
@@ -80,6 +82,33 @@ const userSlice = createSlice({
       state.user = state.user;
       state.error = action.payload;
     },
+    addFavoriteRequest(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    addFavoriteSuccess(state, action) {
+      state.loading = false;
+      state.user.favorites = action.payload.favorites;
+      state.message = action.payload.message;
+    },
+    addFavoriteFailed(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    removeFavoriteRequest(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    removeFavoriteSuccess(state, action) {
+      state.loading = false;
+      state.user.favorites = action.payload.favorites;
+      state.message = action.payload.message;
+    },
+    removeFavoriteFailed(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
     clearAllErrors(state, action) {
       state.error = null;
       state.user = state.user;
@@ -104,6 +133,54 @@ export const register = (data) => async (dispatch) => {
     dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(userSlice.actions.registerFailed(error.response.data.message));
+  }
+};
+
+export const addFavoriteJob = (jobId) => async (dispatch) => {
+  dispatch(userSlice.actions.addFavoriteRequest());
+  try {
+    const response = await axios.post(
+      "http://localhost:4001/api/v1/user/add-favorite",
+      { jobId },
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    dispatch(
+      userSlice.actions.addFavoriteSuccess({
+        favorites: response.data.favorites,
+        message: response.data.message,
+      })
+    );
+  } catch (error) {
+    dispatch(userSlice.actions.addFavoriteFailed(error.response.data.message));
+  }
+};
+
+export const removeFavoriteJob = (jobId) => async (dispatch) => {
+  dispatch(userSlice.actions.removeFavoriteRequest());
+  try {
+    const response = await axios.post(
+      "http://localhost:4001/api/v1/user/remove-favorite",
+      { jobId },
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    dispatch(
+      userSlice.actions.removeFavoriteSuccess({
+        favorites: response.data.favorites,
+        message: response.data.message,
+      })
+    );
+  } catch (error) {
+    dispatch(
+      userSlice.actions.removeFavoriteFailed(error.response.data.message)
+    );
   }
 };
 

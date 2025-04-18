@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { clearAllJobErrors, fetchJobs, getAllCompanyNames } from '../store/Slices/jobSlice';
+import { addFavoriteJob, removeFavoriteJob } from "../store/Slices/userSlice";
+
 import Spinner from '../Components/Spinner';
 import { CiSearch } from "react-icons/ci";
 import { TbListDetails } from "react-icons/tb";
@@ -12,6 +14,7 @@ import cities from '../data/cities';
 import Fields from '../data/fields';
 import img from "../assets/Image-not-found.png";
 import { BsFilterSquare,BsFilterSquareFill } from "react-icons/bs";
+import { MdFavoriteBorder , MdFavorite} from "react-icons/md";
 const Jobs = () => {
   const [city, setCity] = useState("");
   const [field, setField] = useState("");
@@ -27,7 +30,31 @@ const Jobs = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { jobs, loading, error, companyNames } = useSelector((state) => state.jobs);
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+const favorites = user?.favorites || [];
+
+const toggleFavorite = (jobId) => {
+  if (!isAuthenticated) {
+    Swal.fire({
+      title: 'Authentication Required',
+      text: 'You must log in to manage favorites!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Login',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/login");
+      }
+    });
+    return;
+  }
+
+  if (favorites.includes(jobId)) {
+    dispatch(removeFavoriteJob(jobId));
+  } else {
+    dispatch(addFavoriteJob(jobId));
+  }
+};
 
   const handleSearch = () => {
     dispatch(fetchJobs(
@@ -204,6 +231,19 @@ const Jobs = () => {
               {jobs?.length > 0 ? jobs.map(job => (
                 <div className="card" key={job._id}>
                   <Link to={`/jobDetails/${job._id}`} className="card-icon"><TbListDetails /></Link>
+                  <button
+  className="favorite-btn"
+  onClick={() => toggleFavorite(job._id)}
+  title={favorites.includes(job._id) ? "Remove from favorites" : "Add to favorites"}
+>
+{favorites.includes(job._id) ? (
+  <MdFavorite size={30} />
+) : (
+  <MdFavoriteBorder size={30} />
+)}
+
+</button>
+
                   <p className={job.hiringMultipleCandidates ? "hiring-multiple" : "hiring"}>
                     {job.hiringMultipleCandidates ? "Hiring Multiple 👥" : "Hiring One 👤"}
                   </p>
@@ -214,6 +254,8 @@ const Jobs = () => {
                   <p className="posted"><span>Posted:</span> {job.jobPostedOn?.substring(0, 10)}</p>
                   <div className="btn-wrapper">
                     <button className="btn apply-btn" onClick={() => handleApplyClick(job._id)}>Apply Now</button>
+                 
+
                     <Link className="btn details-btn" to={`/jobDetails/${job._id}`}>Details</Link>
                   </div>
                 </div>
