@@ -91,48 +91,50 @@ dispatch(postJob(jobData));
       
       <h3>📢 Add Job Offer</h3>
       <form onSubmit={handlePostJob}>
-        <div>
-          <label>Title</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Job Title"
-          />
-        </div>
+       <div className="field-row">
+    <div>
+      <label>Title</label>
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Job Title"
+      />
+    </div>
 
-        <div>
-          <label>Job Type</label>
-          <select value={jobType} onChange={(e) => setJobType(e.target.value)}>
-            <option value="">Select Job Type</option>
-            <option value="Full-time">Full-time</option>
-            <option value="Part-time">Part-time</option>
-          </select>
-        </div>
+    <div>
+      <label>Job Type</label>
+      <select value={jobType} onChange={(e) => setJobType(e.target.value)}>
+        <option value="">Select Job Type</option>
+        <option value="Full-time">Full-time</option>
+        <option value="Part-time">Part-time</option>
+      </select>
+    </div>
+  </div>
 
-        <div>
-          <label><CiLocationOn  color="black" style={{margin: '5px'}}/>  Location (City)  </label>
-          <select value={location} onChange={(e) => setLocation(e.target.value)}>
-            <option value="">Select Job Location</option>
-            {cities.map((city) => (
-              <option key={city} value={city}>
-                {city}
-              </option>
-            ))}
-          </select>
-        </div>
+  <div className="field-row">
+    <div>
+      <label><CiLocationOn color="black" style={{ margin: '5px' }} /> Location (City)</label>
+      <select value={location} onChange={(e) => setLocation(e.target.value)}>
+        <option value="">Select Job Location</option>
+        {cities.map((city) => (
+          <option key={city} value={city}>
+            {city}
+          </option>
+        ))}
+      </select>
+    </div>
 
-        <div>
-         <label><MdHomeWork color="black" style={{margin: '5px'}}/>   Company Name</label>
-          <input
-            type="text"
-            value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
-            placeholder="Company Name"
-          />
-        </div>
-
-        <div>
+    <div>
+      <label><MdHomeWork color="black" style={{ margin: '5px' }} /> Company Name</label>
+      <input
+        type="text"
+        value={companyName}
+        onChange={(e) => setCompanyName(e.target.value)}
+        placeholder="Company Name"
+      />
+    </div>
+  
           <div className="label-infoTag-wrapper">
                     <label>Company/Job Introduction</label>
                       <span>
@@ -143,9 +145,10 @@ dispatch(postJob(jobData));
             value={introduction}
             onChange={(e) => setIntroduction(e.target.value)}
             placeholder="Company / Job Introduction"
-            rows={7}
+            rows={3}
           />
         </div>
+
 
         <div>
           <label>Responsabilities</label>
@@ -153,10 +156,10 @@ dispatch(postJob(jobData));
             value={responsabilities}
             onChange={(e) => setResponsibilities(e.target.value)}
             placeholder="Job Responsibilities"
-            rows={7}
+            rows={3}
           />
         </div>
-
+        <div className="field-row">
         <div>
            <label> <GiGraduateCap color="black" style={{margin: '5px'}} />Degree Level</label>
           <select
@@ -187,7 +190,9 @@ dispatch(postJob(jobData));
             placeholder="Enter certifications, separated by commas"
           />
         </div>
+        </div>
 
+        <div className="field-row">
         <div>
           <label> <SiOpensourcehardware color="black" style={{margin: '5px'}}/>Required Tech Skills</label>
           <input
@@ -211,7 +216,24 @@ dispatch(postJob(jobData));
             placeholder="Enter years of experience"
           />
         </div>
+</div>
 
+<div>
+          <div className="label-infoTag-wrapper">
+            <label>What We Offer</label>
+            <span>
+              <CiCircleInfo /> Optional
+            </span>
+          </div>
+          <textarea
+            value={offers}
+            onChange={(e) => setOffers(e.target.value)}
+            placeholder="What are we offering in return!"
+            rows={3}
+          />
+        </div>
+
+        <div className="field-row">
         <div>
           <div className="label-infoTag-wrapper">
                  <label>Personal Attributes</label>
@@ -228,22 +250,6 @@ dispatch(postJob(jobData));
             placeholder="Enter personal attributes, separated by commas"
           />
         </div>
-
-        <div>
-          <div className="label-infoTag-wrapper">
-            <label>What We Offer</label>
-            <span>
-              <CiCircleInfo /> Optional
-            </span>
-          </div>
-          <textarea
-            value={offers}
-            onChange={(e) => setOffers(e.target.value)}
-            placeholder="What are we offering in return!"
-            rows={7}
-          />
-        </div>
-
         <div>
           <label>Job Field</label>
           <select value={jobField} onChange={(e) => setJobField(e.target.value)}>
@@ -255,7 +261,9 @@ dispatch(postJob(jobData));
             ))}
           </select>
         </div>
+</div>
 
+<div className="field-row">
         <div>
            <div className="label-infoTag-wrapper">
                   <label><MdAttachMoney color="black" style={{margin: '5px'}} />Salary</label>
@@ -272,31 +280,8 @@ dispatch(postJob(jobData));
         </div>
 
         <div>
-  <div className="label-infoTag-wrapper">
-     <div className="label-infoTag-wrapper">
-                <label>Hiring Multiple Candidates?</label>
-                <span>
-                  <CiCircleInfo /> Optional
-                </span>
-              </div>
-    <span>
-      <CiCircleInfo /> Optional
-    </span>
-  </div>
-  <select
-    value={hiringMultipleCandidates ? "true" : "false"}
-    onChange={(e) => setHiringMultipleCandidates(e.target.value === "true")}
-  >
-    <option value="">Hiring Multiple Candidates?</option>
-    <option value="true">Yes</option>
-    <option value="false">No</option>
-  </select>
-</div>
-
-
-        <div>
           <div className="label-infoTag-wrapper">
-            <label><TbWorldWww color="black" style={{margin: '5px'}} />Personal Website</label>
+            <label><TbWorldWww color="black" style={{margin: '5px'}} /> Website</label>
             <span>
               <CiCircleInfo /> Optional
             </span>
@@ -307,8 +292,37 @@ dispatch(postJob(jobData));
             onChange={(e) => setPersonalWebsite(e.target.value)}
             placeholder="Personal Website Name/Title"
           />
-        </div>
-<FormControlLabel onChange={(e) => setNewsLetterSend(e.target.checked)} checked={newsLetterSend}control={<Checkbox />} label="Send Job to Newsletter 📰" />
+        </div> 
+
+</div>
+
+        <div>
+
+<div className="label-infoTag-wrapper">
+           <label>Hiring Multiple Candidates?</label>
+            <span>
+ <CiCircleInfo /> Optional
+</span>
+         </div>
+
+
+<select
+value={hiringMultipleCandidates ? "true" : "false"}
+onChange={(e) => setHiringMultipleCandidates(e.target.value === "true")}
+>
+<option value="">Hiring Multiple Candidates?</option>
+<option value="true">Yes</option>
+<option value="false">No</option>
+</select>
+</div>
+<FormControlLabel
+  className="newsletter-checkbox"
+  onChange={(e) => setNewsLetterSend(e.target.checked)}
+  checked={newsLetterSend}
+  control={<Checkbox />}
+  label="Send Job to Newsletter 📰"
+/>
+
 
 
         <div>

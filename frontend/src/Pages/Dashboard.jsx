@@ -1,54 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { logout, clearAllUserErrors } from "../store/Slices/userSlice";
-import { LuMoveRight } from "react-icons/lu";
-import MyProfile from "../Components/MyProfile";
-import UpdateProfile from "../Components/UpdateProfile";
-import UpdatePassword from "../components/UpdatePassword";
-import MyJobs from "../components/MyJobs";
-import JobPost from "../components/JobPost";
-import Applications from "../components/Applications";
-import MyApplications from "../components/MyApplications";
+import { MdLogout } from "react-icons/md";
+import { FaUserCog, FaHome, FaTachometerAlt, FaBox, FaUsers, FaUserCircle } from "react-icons/fa";
 import Swal from "sweetalert2";
-const Dashboard = () => {
-  const [show, setShow] = useState(false);
-  const [componentName, setComponentName] = useState("My Profile");
 
-  const { loading, isAuthenticated, error, user } = useSelector(
-    (state) => state.user
-  );
+const Dashboard = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  const { loading, isAuthenticated, error, user } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
   const navigateTo = useNavigate();
 
-
-
-const handleLogout = () => {
-  Swal.fire({
-    title: 'Are you sure?',
-    text: 'Do you really want to logout?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, logout!',
-    cancelButtonText: 'Cancel'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      dispatch(logout());
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Logged out!',
-        text: 'You have been logged out successfully.',
-        showConfirmButton: false,
-        timer: 1800
-      });
-    }
-  });
-};
+  const handleLogout = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to logout?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, logout!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(logout());
+        Swal.fire({
+          icon: 'success',
+          title: 'Logged out!',
+          text: 'You have been logged out successfully.',
+          showConfirmButton: false,
+          timer: 1800
+        });
+      }
+    });
+  };
 
   useEffect(() => {
     if (error) {
@@ -60,147 +48,108 @@ const handleLogout = () => {
     }
   }, [dispatch, error, loading, isAuthenticated]);
 
+  const handleLinkClick = () => {
+    if (collapsed) setCollapsed(false);
+  };
+
   return (
-    <>
-      <section className="account">
+    <div className="layout">
+      <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
+        <div className="sidebar-header">
+          <button onClick={() => setCollapsed(!collapsed)} className="toggle-btn">
+            ☰
+          </button>
+          {!collapsed && <h3></h3>}
+        </div>
+        <ul className="sidebar-links">
+          <li>
+            <Link to="/dashboard/profile" onClick={handleLinkClick}>
+              <FaUserCircle />
+              {!collapsed && " My Profile"}
+            </Link>
+          </li>
+          <li>
+            <Link to="/dashboard/update-profile" onClick={handleLinkClick}>
+              <FaUserCog />
+              {!collapsed && " Update Profile"}
+            </Link>
+          </li>
+          <li>
+            <Link to="/dashboard/update-password" onClick={handleLinkClick}>
+              🔒   {!collapsed && "Update Password"}
+            </Link>
+          </li>
+
+          {user?.role === "Employer" && (
+            <>
+              <li>
+                <Link to="/dashboard/job-post" onClick={handleLinkClick}>
+                  📝   {!collapsed && "Post New Job"}
+                </Link>
+              </li>
+              <li>
+                <Link to="/dashboard/my-jobs" onClick={handleLinkClick}>
+                  📁   {!collapsed && "My Jobs"}
+                </Link>
+              </li>
+              <li>
+                <Link to="/dashboard/applications" onClick={handleLinkClick}>
+                  📨   {!collapsed && "Applications"}
+                </Link>
+              </li>
+            </>
+          )}
+
+          {user?.role === "Job Seeker" && (
+            <li>
+              <Link to="/dashboard/my-applications" onClick={handleLinkClick}>
+              📨    {!collapsed && "My Applications"}
+              </Link>
+            </li>
+          )}
+        </ul>
+
+        <div className="sidebar-footer">
+  {user?.profilePicture?.url ? (
+    <img
+      src={user.profilePicture.url}
+      alt="Profile"
+      className="sidebar-avatar"
+      style={{ width: "40px", height: "40px", borderRadius: "50%" }}
+    />
+  ) : (
+    <div
+      className="sidebar-avatar"
+      style={{
+        width: "40px",
+        height: "40px",
+        borderRadius: "50%",
+        backgroundColor: "#ccc", // fallback color if no profile picture
+      }}
+    ></div>
+  )}
+  
+  {!collapsed && <span>{user?.name || "User"}</span>}
+</div>
+
+      </aside>
+
+      <main className="main-content">
         <div className="component_header">
-          <p>Dashboard</p>
+      
           <p>
             Welcome! <span>{user && user.name}</span>
           </p>
-        </div>
-        <div className="container">
-          <div className={show ? "sidebar showSidebar" : "sidebar"}>
-            <ul className="sidebar_links">
-              <h4>Manage Account</h4>
-              <li>
-                <button
-                  onClick={() => {
-                    setComponentName("My Profile");
-                    setShow(!show);
-                  }}
-                >
-                  My Profile
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => {
-                    setComponentName("Update Profile");
-                    setShow(!show);
-                  }}
-                >
-                  Update Profile
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => {
-                    setComponentName("Update Password");
-                    setShow(!show);
-                  }}
-                >
-                  Update Password
-                </button>
-              </li>
-
-              {user && user.role === "Employer" && (
-                <li>
-                  <button
-                    onClick={() => {
-                      setComponentName("Job Post");
-                      setShow(!show);
-                    }}
-                  >
-                    Post New Job
-                  </button>
-                </li>
-              )}
-              {user && user.role === "Employer" && (
-                <li>
-                  <button
-                    onClick={() => {
-                      setComponentName("My Jobs");
-                      setShow(!show);
-                    }}
-                  >
-                    My Jobs
-                  </button>
-                </li>
-              )}
-              {user && user.role === "Employer" && (
-                <li>
-                  <button
-                    onClick={() => {
-                      setComponentName("Applications");
-                      setShow(!show);
-                    }}
-                  >
-                    Applications
-                  </button>
-                </li>
-              )}
-              {user && user.role === "Job Seeker" && (
-                <li>
-                  <button
-                    onClick={() => {
-                      setComponentName("My Applications");
-                      setShow(!show);
-                    }}
-                  >
-                    My Applications
-                  </button>
-                </li>
-              )}
-              <li>
-                <button onClick={handleLogout}>Logout</button>
-              </li>
-            </ul>
-          </div>
-          <div className="banner">
-            <div
-              className={
-                show ? "sidebar_icon move_right" : "sidebar_icon move_left"
-              }
-            >
-              <LuMoveRight
-                onClick={() => setShow(!show)}
-                className={show ? "left_arrow" : "right_arrow"}
-              />
-            </div>
-            {(() => {
-              switch (componentName) {
-                case "My Profile":
-                  return <MyProfile />;
-                  break;
-                case "Update Profile":
-                  return <UpdateProfile />;
-                  break;
-                case "Update Password":
-                  return <UpdatePassword />;
-                  break;
-                case "Job Post":
-                  return <JobPost />;
-                  break;
-                case "My Jobs":
-                  return <MyJobs />;
-                  break;
-                case "Applications":
-                  return <Applications />;
-                  break;
-                case "My Applications":
-                  return <MyApplications />;
-                  break;
-
-                default:
-                  <MyProfile />;
-                  break;
-              }
-            })()}
+          <div className="icons">
+           
+            <button onClick={handleLogout}>
+              <MdLogout /> Logout
+            </button>
           </div>
         </div>
-      </section>
-    </>
+        <Outlet />
+      </main>
+    </div>
   );
 };
 

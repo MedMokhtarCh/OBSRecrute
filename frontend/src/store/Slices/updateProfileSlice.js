@@ -7,6 +7,13 @@ const updateProfileSlice = createSlice({
     loading: false,
     error: null,
     isUpdated: false,
+    forgotPasswordLoading: false,
+    forgotPasswordSuccess: null,
+    forgotPasswordError: null,
+
+    resetPasswordLoading: false,
+    resetPasswordSuccess: null,
+    resetPasswordError: null,
   },
   reducers: {
     updateProfileRequest(state, action) {
@@ -35,10 +42,46 @@ const updateProfileSlice = createSlice({
       state.loading = false;
       state.isUpdated = false;
     },
-    profileResetAfterUpdate(state, action) {
+
+    forgotPasswordRequest(state) {
+      state.forgotPasswordLoading = true;
+      state.forgotPasswordSuccess = null;
+      state.forgotPasswordError = null;
+    },
+    forgotPasswordSuccess(state, action) {
+      state.forgotPasswordLoading = false;
+      state.forgotPasswordSuccess = action.payload;
+    },
+    forgotPasswordFailed(state, action) {
+      state.forgotPasswordLoading = false;
+      state.forgotPasswordError = action.payload;
+    },
+
+    // Reset Password
+    resetPasswordRequest(state) {
+      state.resetPasswordLoading = true;
+      state.resetPasswordSuccess = null;
+      state.resetPasswordError = null;
+    },
+    resetPasswordSuccess(state, action) {
+      state.resetPasswordLoading = false;
+      state.resetPasswordSuccess = action.payload;
+    },
+    resetPasswordFailed(state, action) {
+      state.resetPasswordLoading = false;
+      state.resetPasswordError = action.payload;
+    },
+
+    profileResetAfterUpdate(state) {
       state.error = null;
       state.isUpdated = false;
       state.loading = false;
+      state.forgotPasswordLoading = false;
+      state.forgotPasswordSuccess = null;
+      state.forgotPasswordError = null;
+      state.resetPasswordLoading = false;
+      state.resetPasswordSuccess = null;
+      state.resetPasswordError = null;
     },
   },
 });
@@ -79,6 +122,49 @@ export const updatePassword = (data) => async (dispatch) => {
     dispatch(
       updateProfileSlice.actions.updatePasswordFailed(
         error.response.data.message || "Failed to update password."
+      )
+    );
+  }
+};
+
+export const forgotPassword = (email) => async (dispatch) => {
+  dispatch(updateProfileSlice.actions.forgotPasswordRequest());
+  try {
+    const response = await axios.post(
+      "http://localhost:4001/api/v1/user/forgot-password",
+      { email },
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    dispatch(
+      updateProfileSlice.actions.forgotPasswordSuccess(response.data.message)
+    );
+  } catch (error) {
+    dispatch(
+      updateProfileSlice.actions.forgotPasswordFailed(
+        error.response?.data?.message || "Error requesting reset"
+      )
+    );
+  }
+};
+
+export const resetPassword = (data) => async (dispatch) => {
+  dispatch(updateProfileSlice.actions.resetPasswordRequest());
+  try {
+    const response = await axios.post(
+      "http://localhost:4001/api/v1/user/reset-password",
+      data,
+      { headers: { "Content-Type": "application/json" } }
+    );
+    dispatch(
+      updateProfileSlice.actions.resetPasswordSuccess(response.data.message)
+    );
+  } catch (error) {
+    dispatch(
+      updateProfileSlice.actions.resetPasswordFailed(
+        error.response?.data?.message || "Error resetting password"
       )
     );
   }

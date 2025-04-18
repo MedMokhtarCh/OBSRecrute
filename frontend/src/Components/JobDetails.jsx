@@ -9,56 +9,65 @@ import { IoArrowBackOutline } from "react-icons/io5";
 
 
 const containerStyle = {
-  backgroundColor: "#ffffff",
-  borderRadius: "12px",
-  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+  backgroundColor: "#fff",
+  borderRadius: "16px",
+  boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
   padding: "2rem",
-  maxWidth: "900px",
-  margin: "2rem auto",
+  maxWidth: "1000px",
+  margin: "3rem auto",
   fontFamily: "Poppins, sans-serif",
-  color: "#333",
+  color: "#2d3436",
+  transition: "all 0.3s ease-in-out",
 };
 
 const sectionStyle = {
-  marginTop: "30px",
-  padding: "20px",
-  borderRadius: "10px",
-  backgroundColor: "#f8f9fa",
+  marginTop: "2rem",
+  padding: "1rem",
+  borderRadius: "14px",
+  backgroundColor: "#f1f6fb",
+  boxShadow: "0 4px 10px rgba(0, 0, 0, 0.05)",
 };
 
 const sectionTitleStyle = {
-  fontSize: "1.5rem",
-  color: "#007bff",
-  marginBottom: "15px",
+  fontSize: "1rem",
+  color: "#0984e3",
+  marginBottom: "1rem",
   fontWeight: "700",
+  borderBottom: "2px solid #74b9ff",
+  paddingBottom: "0.3rem",
 };
 
 const listItemStyle = {
-  paddingLeft: "20px",
+  paddingLeft: "1rem",
   lineHeight: "1.8",
   display: "flex",
   alignItems: "center",
-  gap: "8px",
+  gap: "10px",
+  color: "#2d3436",
+  fontSize: "1rem",
 };
 
 const jobTitleStyle = {
-  fontSize: "2.5rem",
+  fontSize: "2rem",
   fontWeight: "700",
-  color: "#333",
+  color: "#2d3436",
   textAlign: "center",
 };
 
 const salaryStyle = {
-  fontSize: "1.3rem",
-  color: "#88ea98",
-  fontWeight: "700",
+  fontSize: "1rem",
+  color: "#00b894",
+  fontWeight: "600",
 };
 
 const linkStyle = {
-  color: "#007bff",
+  color: "#0984e3",
   fontWeight: "600",
   textDecoration: "none",
+  transition: "color 0.2s",
 };
+
+
 
 const JobDetails = () => {
   const { singleJob } = useSelector((state) => state.jobs);

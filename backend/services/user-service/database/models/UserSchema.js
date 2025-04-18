@@ -2,9 +2,10 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import validator from "validator";
 
 dotenv.config();
-import validator from "validator";
+
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -25,36 +26,58 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  fieldChoices: {
-    firstChoice: String,
-    SecondChoice: String,
-    ThirdChoice: String,
-  },
-  password: {
-    type: String,
-    required: true,
-    minLength: [8, "Name must contain at least 8 characters."],
-    maxLength: [32, "Name cannot exceed 32 characters"],
-    select: false,
-  },
-  resume: {
+
+  profilePicture: {
     public_id: String,
     url: String,
   },
-  coverLetter: {
-    type: mongoose.Schema.Types.Mixed, // Allows both string and file objects
-    validate: {
-      validator: function (value) {
-        if (
-          typeof value === "string" ||
-          (value && value.url && value.public_id)
-        ) {
-          return true;
-        }
-        return false;
-      },
-      message: "Cover letter must be either a string or a valid file object.",
+  diplomas: [
+    {
+      title: String,
+      institution: String,
+      year: Number,
     },
+  ],
+
+  technicalSkills: [String],
+  softSkills: [String],
+
+  languages: [
+    {
+      name: String,
+      level: String, // Exemple : "Débutant", "Intermédiaire", "Avancé", "Natif"
+    },
+  ],
+
+  education: [
+    {
+      degree: String,
+      school: String,
+      startYear: Number,
+      endYear: Number,
+    },
+  ],
+  experiences: [
+    {
+      jobTitle: String,
+      company: String,
+      description: String,
+      startDate: Date,
+      endDate: Date,
+    },
+  ],
+
+  fieldChoices: {
+    firstChoice: String,
+    SecondChoice: String,
+  },
+
+  password: {
+    type: String,
+    required: true,
+    minLength: [8, "Password must contain at least 8 characters."],
+    maxLength: [32, "Password cannot exceed 32 characters"],
+    select: false,
   },
 
   role: {
@@ -62,6 +85,7 @@ const UserSchema = new mongoose.Schema({
     required: true,
     enum: ["Job Seeker", "Employer", "Admin"],
   },
+
   companyName: {
     type: String,
     validate: {
@@ -74,29 +98,46 @@ const UserSchema = new mongoose.Schema({
       message: "Company name is required for Employers.",
     },
   },
+  companyProfile: {
+    logo: {
+      public_id: String,
+      url: String,
+    },
+    description: String,
+    sector: String,
+    location: String,
+  },
+  favorites: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Job",
+    },
+  ],
+
   createdAt: {
     type: Date,
     default: Date.now,
   },
+  resetPasswordOTP: String,
+  resetPasswordOTPExpire: Date,
 });
+
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();
   }
   this.password = await bcrypt.hash(this.password, 10);
 });
+
+// 🔑 Méthodes
 UserSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
 UserSchema.methods.getJWTToken = function () {
-  return jwt.sign(
-    {
-      id: this._id,
-    },
-    process.env.JWT_SECRET_KEY,
-    { expiresIn: process.env.JWT_EXPIRE }
-  );
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
 };
 
 export const User = mongoose.model("User", UserSchema);

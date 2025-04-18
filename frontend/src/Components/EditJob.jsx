@@ -15,7 +15,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { MdHomeWork, MdAttachMoney } from "react-icons/md";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import './EditJob.css'
+
 import Swal from 'sweetalert2';
 
 
@@ -143,7 +143,7 @@ const JobEdit = () => {
       <h3>Edit the job ✏️</h3>
       
       <form onSubmit={handleEditJob}>
-        {/* Title */}
+      <div className="field-row">
         <div>
           <label>Title</label>
           <input
@@ -163,8 +163,9 @@ const JobEdit = () => {
             <option value="Part-time">Part-time</option>
           </select>
         </div>
+        </div>
 
-        {/* Location */}
+        <div className="field-row">
         <div>
           <label><CiLocationOn  color="black" style={{margin: '5px'}}/>  Location (City)  </label>
           <select value={location} onChange={(e) => setLocation(e.target.value)}>
@@ -187,7 +188,7 @@ const JobEdit = () => {
             placeholder="Company Name"
           />
         </div>
-
+</div>
         {/* Job Introduction */}
         <div>
          
@@ -201,22 +202,22 @@ const JobEdit = () => {
             value={introduction}
             onChange={(e) => setIntroduction(e.target.value)}
             placeholder="Company / Job Introduction"
-            rows={7}
+            rows={3}
           />
         </div>
 
-        {/* Responsibilities */}
+       
         <div>
           <label>Responsabilities</label>
           <textarea
             value={responsabilities}
             onChange={(e) => setResponsibilities(e.target.value)}
             placeholder="Job Responsibilities"
-            rows={7}
+            rows={3}
           />
         </div>
 
-        {/* Degree Level */}
+        <div className="field-row">
         <div>
           <label> <GiGraduateCap color="black" style={{margin: '5px'}} />Degree Level</label>
           <select
@@ -249,8 +250,10 @@ const JobEdit = () => {
             placeholder="Enter certifications, separated by commas"
           />
         </div>
+        </div>
+        
 
-        {/* Required Tech Skills */}
+        <div className="field-row">
         <div>
           <label> <SiOpensourcehardware color="black" style={{margin: '5px'}}/>Required Tech Skills</label>
           <input
@@ -276,7 +279,25 @@ const JobEdit = () => {
           />
         </div>
 
-        {/* Personal Attributes */}
+</div>
+
+{/* Offers */}
+<div>
+          <div className="label-infoTag-wrapper">
+            <label>What We Offer</label>
+            <span>
+              <CiCircleInfo /> Optional
+            </span>
+          </div>
+          <textarea
+            value={offers}
+            onChange={(e) => setOffers(e.target.value)}
+            placeholder="What are we offering in return!"
+            rows={3}
+          />
+        </div>
+      
+        <div className="field-row">
         <div>
         <div className="label-infoTag-wrapper">
         <label>Personal Attributes</label>
@@ -295,23 +316,7 @@ const JobEdit = () => {
           />
         </div>
 
-        {/* Offers */}
-        <div>
-          <div className="label-infoTag-wrapper">
-            <label>What We Offer</label>
-            <span>
-              <CiCircleInfo /> Optional
-            </span>
-          </div>
-          <textarea
-            value={offers}
-            onChange={(e) => setOffers(e.target.value)}
-            placeholder="What are we offering in return!"
-            rows={7}
-          />
-        </div>
-
-        {/* Job Field */}
+        
         <div>
           <label>Job Field</label>
           <select value={jobField} onChange={(e) => setJobField(e.target.value)}>
@@ -324,7 +329,10 @@ const JobEdit = () => {
           </select>
         </div>
 
-        {/* Salary */}
+</div>
+      
+      
+<div className="field-row">
         <div>
         <div className="label-infoTag-wrapper">
         <label><MdAttachMoney color="black" style={{margin: '5px'}} />Salary</label>
@@ -341,6 +349,21 @@ const JobEdit = () => {
           />
         </div>
 
+
+        {/* Personal Website */}
+        <div>
+          
+            <label><TbWorldWww color="black" style={{margin: '5px'}} />Website</label>
+           
+         
+          <input
+            type="text"
+            value={personalWebsite}
+            onChange={(e) => setPersonalWebsite(e.target.value)}
+            placeholder="Personal Website Name/Title"
+          />
+        </div>
+        </div>
         {/* Hiring Multiple Candidates */}
         <div>
           <div className="label-infoTag-wrapper">
@@ -359,32 +382,24 @@ const JobEdit = () => {
           </select>
         </div>
 
-        {/* Personal Website */}
-        <div>
-          
-            <label><TbWorldWww color="black" style={{margin: '5px'}} />Personal Website</label>
-           
-         
-          <input
-            type="text"
-            value={personalWebsite}
-            onChange={(e) => setPersonalWebsite(e.target.value)}
-            placeholder="Personal Website Name/Title"
-          />
-        </div>
 
         
 
 
         
-      <FormControlLabel onChange={(e) => setNewsLetterSend(e.target.checked)} checked={newsLetterSend}control={<Checkbox />} label="Send Job to Newsletter 📰" />
+
+      <FormControlLabel
+        className="newsletter-checkbox"
+        onChange={(e) => setNewsLetterSend(e.target.checked)}
+       checked={newsLetterSend}
+        control={<Checkbox />}
+        label="Send Job to Newsletter 📰"
+      />
     
-   
-
-        {/* Submit Button */}
+  
         <div>
           <button
-           
+            style={{ margin: "0 auto" }}
             className="btn"
             type="submit"
             disabled={loading}

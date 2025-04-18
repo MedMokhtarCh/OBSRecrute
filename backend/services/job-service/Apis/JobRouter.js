@@ -3,6 +3,7 @@ import express from "express";
 import {
   deleteJob,
   editJob,
+  getAllCompanyNames,
   getAllJobs,
   getASingleJob,
   getMyJobs,
@@ -33,5 +34,6 @@ router.put(
   isAuthorized("Admin", "Employer"), // Autorise l'admin et l'employeur à éditer
   editJob
 );
+router.get("/companies", getAllCompanyNames);
 
 export default router;

@@ -12,6 +12,7 @@ import Spinner from "./Spinner"
 import { IoArrowBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2"; 
+
 const ApplicationsByJob = () => {
   const { jobId } = useParams();
   const dispatch = useDispatch();
@@ -86,9 +87,9 @@ const ApplicationsByJob = () => {
          <IoArrowBackOutline size={24} onClick={() => {
                 navigate(-1)}
                } />
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div>
       <h3 style={{ color: "#0077b6" }}>
-  Applications for the job <span style={{ fontWeight: "normal" }}></span>
+  Applications for the job
 </h3>
 
        
@@ -120,14 +121,15 @@ const ApplicationsByJob = () => {
                   <td>{app.jobSeekerInfo.email}</td>
                   <td>{app.jobSeekerInfo.phone}</td>
                   <td>
-  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+  <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
     <a
       href={app.jobSeekerInfo.resume.url}
       target="_blank"
       rel="noreferrer"
       style={{
-        padding: "6px 12px",
+        padding: "6px 6px",
         backgroundColor: "#e0f7fa",
+        marginBottom:'4px',
         color: "#0077b6",
         borderRadius: "5px",
         textDecoration: "none",
@@ -136,7 +138,7 @@ const ApplicationsByJob = () => {
         transition: "all 0.3s ease",
       }}
     >
-      📄 View Resume
+      📄Resume
     </a>
 
     <a
@@ -144,7 +146,7 @@ const ApplicationsByJob = () => {
       target="_blank"
       rel="noreferrer"
       style={{
-        padding: "6px 12px",
+        padding: "6px 6px",
         backgroundColor: "#fff3e0",
         color: "#f57c00",
         borderRadius: "5px",
@@ -154,7 +156,7 @@ const ApplicationsByJob = () => {
         transition: "all 0.3s ease",
       }}
     >
-      📝 View Cover Letter
+      📝CoverLetter
     </a>
   </div>
 </td>
@@ -165,7 +167,7 @@ const ApplicationsByJob = () => {
   value={app.status || "pending"}
   onChange={(e) => handleChangeStatus(app._id, e.target.value)}
   style={{
-    padding: "6px 10px",
+    padding: "6px 6px",
     borderRadius: "4px",
     border: "1px solid #ccc",
     backgroundColor: "#fff",

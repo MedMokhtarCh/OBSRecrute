@@ -7,6 +7,7 @@ const jobSlice = createSlice({
     jobs: [],
     loading: false,
     error: null,
+    companyNames: [],
     message: null,
     singleJob: {},
     myJobs: [],
@@ -115,44 +116,97 @@ const jobSlice = createSlice({
       state.loading = false;
       state.error = action.payload; // Erreur reçue
     },
+    requestForAllCompanyNames(state, action) {
+      state.loading = true;
+      state.error = null;
+    },
+    successForAllCompanyNames(state, action) {
+      state.loading = false;
+      state.error = null;
+      state.companyNames = action.payload;
+    },
+    failureForAllCompanyNames(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
 export const fetchJobs =
-  (city, field, searchKeyword = "") =>
+  (
+    city,
+    field,
+    searchKeyword = "",
+    salaryMin = "",
+    companyName = "",
+    degreeLevel = "",
+    yearsOfExperience = "",
+    jobType = "",
+    hiringMultipleCandidates = ""
+  ) =>
   async (dispatch) => {
     try {
       dispatch(jobSlice.actions.requestForAllJobs());
+
       let link = "http://localhost:4002/api/v1/job/getAll?";
       let queryParams = [];
+
+      // Ajouter les filtres de recherche par mot-clé
       if (searchKeyword) {
         queryParams.push(`searchKeyword=${searchKeyword}`);
       }
+
+      // Filtrage par ville
       if (city && city !== "All") {
         queryParams.push(`city=${city}`);
       }
 
-      if (city && city === "All") {
-        queryParams = [];
-        if (searchKeyword) {
-          queryParams.push(`searchKeyword=${searchKeyword}`);
-        }
-      }
-      if (field) {
+      // Filtrage par domaine
+      if (field && field !== "All") {
         queryParams.push(`field=${field}`);
       }
-      if (field && field === "All") {
-        queryParams = [];
-        if (searchKeyword) {
-          queryParams.push(`searchKeyword=${searchKeyword}`);
-        }
-        if (city && city !== "All") {
-          queryParams.push(`city=${city}`);
-        }
+
+      // Fourchette de salaire
+      if (salaryMin) {
+        queryParams.push(`salaryMin=${salaryMin}`);
       }
 
-      link += queryParams.join("&");
+      // Filtrage par nom d'entreprise
+      if (companyName) {
+        queryParams.push(`companyName=${companyName}`);
+      }
+
+      // Niveau de diplôme
+      if (degreeLevel) {
+        queryParams.push(`degreeLevel=${degreeLevel}`);
+      }
+
+      // Années d'expérience
+      if (yearsOfExperience) {
+        queryParams.push(`yearsOfExperience=${yearsOfExperience}`);
+      }
+
+      // Recrutement multiple
+      if (hiringMultipleCandidates !== null) {
+        queryParams.push(
+          `hiringMultipleCandidates=${hiringMultipleCandidates}`
+        );
+      }
+
+      // Type de contrat
+      if (jobType) {
+        queryParams.push(`jobType=${jobType}`);
+      }
+
+      // Ajoutez les paramètres à l'URL
+      if (queryParams.length > 0) {
+        link += queryParams.join("&");
+      }
+
+      // Effectuer la requête GET
       const response = await axios.get(link, { withCredentials: true });
+
+      // Dispatch des résultats de la recherche
       dispatch(jobSlice.actions.successForAllJobs(response.data.jobs));
       dispatch(jobSlice.actions.clearAllErrors());
     } catch (error) {
@@ -216,6 +270,26 @@ export const deleteJob = (id) => async (dispatch) => {
     dispatch(jobSlice.actions.failureForDeleteJob(error.response.data.message));
   }
 };
+export const getAllCompanyNames = () => async (dispatch) => {
+  dispatch(jobSlice.actions.requestForAllCompanyNames());
+  try {
+    const response = await axios.get(
+      `http://localhost:4002/api/v1/job/companies`,
+      { withCredentials: true }
+    );
+    dispatch(
+      jobSlice.actions.successForAllCompanyNames(response.data.companyNames)
+    );
+    dispatch(jobSlice.actions.clearAllErrors());
+  } catch (error) {
+    dispatch(
+      jobSlice.actions.failureForAllCompanyNames(
+        error.response?.data?.message || "Error retrieving company names"
+      )
+    );
+  }
+};
+
 export const editJob = (id, data) => async (dispatch) => {
   dispatch(jobSlice.actions.requestForEditJob());
   try {

@@ -50,7 +50,7 @@ const MyJobs = () => {
   };
 
   const handleUpdateJob = (id) => {
-    if (id){navigateTo(`/EditJob/${id}`);}
+    if (id){navigateTo(`/dashboard/EditJob/${id}`);}
     
     
   };
@@ -91,9 +91,9 @@ const MyJobs = () => {
                 <td className="actions" data-label="Actions">
   <button onClick={() => handleDeleteJob(element._id)}>🗑️ Delete</button>
   <button onClick={() => handleUpdateJob(element._id)}>✏️ Update</button>
-  <Link to={`/applications-for-job/${element._id}`}>📑 Applications</Link>
+  <Link to={`/dashboard/applications-for-job/${element._id}`}>📑 Applications</Link>
 
-  <Link  to={`/jobDetails/${element._id}`}>🔍 See job details</Link> {/* ✅ ajouté ici */}
+  <Link  to={`/dashboard/jobDetails/${element._id}`}>🔍 See job details</Link> {/* ✅ ajouté ici */}
 </td>
 
               </tr>

@@ -166,41 +166,42 @@ const Applications = () => {
   );
 };
 
-// 🎨 Styles en ligne
 const containerStyle = {
-  padding: "20px",
+  padding: "20px 20px",
   margin: "0 auto",
-  maxWidth: "1200px",
-  backgroundColor: "#f4f7fc",
-  borderRadius: "12px",
-  textAlign: "center"
+  maxWidth: "1000px",
+  backgroundColor: "#f0f9fc",
+  borderRadius: "13px",
+  textAlign: "center",
 };
 
 const applicationsContainerStyle = {
   display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-  gap: "20px",
+  gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+  gap: "24px",
 };
 
 const cardStyle = {
   backgroundColor: "#ffffff",
   padding: "20px",
   borderRadius: "12px",
-  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  boxShadow: "0 6px 18px rgba(0, 0, 0, 0.05)",
   textAlign: "left",
+  transition: "transform 0.2s ease",
 };
 
 const headerStyle = {
-  fontSize: "1.8rem",
+  fontSize: "Arem",
   fontWeight: "600",
-  marginBottom: "20px",
-  color: "#333",
+  marginBottom: "50px",
+  color: "#1f2937",
 };
 
 const textStyle = {
-  fontSize: "1rem",
+  fontSize: "0.8rem",
   marginBottom: "10px",
-  color: "#555",
+  color: "#4b5563",
+  lineHeight: "1.5",
 };
 
 const statusWrapperStyle = {
@@ -208,41 +209,55 @@ const statusWrapperStyle = {
   alignItems: "center",
   gap: "10px",
   marginBottom: "15px",
+  marginTop: "10px",
 };
 
 const labelStyle = {
-  fontWeight: "bold",
-  color: "#333",
+  fontWeight: "600",
+  color: "#1f2937",
 };
 
 const selectStyle = {
-  padding: "8px",
-  borderRadius: "5px",
-  border: "1px solid #ddd",
+  padding: "8px 12px",
+  borderRadius: "6px",
+  border: "1px solidrgb(84, 121, 165)",
+  fontSize: "14px",
+  backgroundColor: "#f8fafc",
+  color: "#1e293b",
+  outline: "none",
+  cursor: "pointer",
 };
 
 const buttonWrapperStyle = {
   display: "flex",
   justifyContent: "space-between",
   marginTop: "20px",
+  flexWrap: "wrap",
+  gap: "10px",
 };
 
 const buttonStyle = {
-
-
-  color: "#0288d1",
-  border: "none",
+  backgroundColor: "#e3f2fd",
+  color: "#0077b6",
+  border: "1px solidrgb(27, 127, 174)",
   borderRadius: "8px",
+  padding: "8px 12px",
   cursor: "pointer",
   textDecoration: "none",
-  display: "inline-block",
+  fontSize: "14px",
+  fontWeight: "500",
+  transition: "all 0.2s ease-in-out",
 };
-
 
 const outlineButtonStyle = {
   color: "#d32f2f",
+  backgroundColor: "transparent",
   border: "none",
-  textDecoration: "none",
+  fontSize: "18px",
+  cursor: "pointer",
+  transition: "color 0.2s ease",
 };
+
+
 
 export default Applications;

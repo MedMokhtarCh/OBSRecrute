@@ -1,40 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { clearAllJobErrors, fetchJobs } from '../store/Slices/jobSlice';
+import { clearAllJobErrors, fetchJobs, getAllCompanyNames } from '../store/Slices/jobSlice';
 import Spinner from '../Components/Spinner';
 import { CiSearch } from "react-icons/ci";
 import { TbListDetails } from "react-icons/tb";
-import { MdMapsHomeWork , MdPlace , MdAttachMoney} from "react-icons/md"; 
-import { Link } from 'react-router-dom'; 
+import { MdMapsHomeWork, MdPlace, MdAttachMoney } from "react-icons/md";
+import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import cities from '../data/cities';
 import Fields from '../data/fields';
 import img from "../assets/Image-not-found.png";
-import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
-
+import { BsFilterSquare, BsFilterSquareFill } from "react-icons/bs";
 
 const Jobs = () => {
-  const [city, setCity] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [niche, setNiche] = useState("");
-  const [selectedNiche, setSelectedNiche] = useState("");
-  const [searchKeyword, setSearchKeyword] = useState("");
+  const [filters, setFilters] = useState({
+    city: "",
+    field: "",
+    searchKeyword: "",
+    salaryMin: 0,
+    jobType: "",
+    yearsOfExperience: 0,
+    degreeLevel: "",
+    companyName: "",
+    hiringMultipleCandidates: "",
+    showFilters: false,
+  });
 
-  const { jobs, loading, error } = useSelector((state) => state.jobs);
-  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { jobs, loading, error, companyNames } = useSelector((state) => state.jobs);
+  const { isAuthenticated } = useSelector((state) => state.user);
 
-  const handleCityChange = (selected) => {
-    setCity(city === selected ? "" : selected);
-    setSelectedCity(selectedCity === selected ? "" : selected);
-  };
+  useEffect(() => {
+    dispatch(getAllCompanyNames());
+  }, [dispatch]);
 
-  const handleNicheChange = (selected) => {
-    setNiche(niche === selected ? "" : selected);
-    setSelectedNiche(selectedNiche === selected ? "" : selected);
-  };
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearAllJobErrors());
+    }
+  }, [error, dispatch]);
 
+  useEffect(() => {
+    const { city, field, searchKeyword, salaryMin, companyName, degreeLevel, yearsOfExperience, jobType, hiringMultipleCandidates } = filters;
+    dispatch(fetchJobs(
+      city, field, searchKeyword, salaryMin, companyName, degreeLevel, yearsOfExperience, jobType, hiringMultipleCandidates || null
+    ));
+  }, [filters, dispatch]);
 
   const handleApplyClick = (jobId) => {
     if (!isAuthenticated) {
@@ -43,9 +57,7 @@ const Jobs = () => {
         text: 'You must log in to apply for a job!',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Login Now'
+        confirmButtonText: 'Login',
       }).then((result) => {
         if (result.isConfirmed) {
           navigate("/login");
@@ -55,190 +67,170 @@ const Jobs = () => {
       navigate(`/post/application/${jobId}`);
     }
   };
-  
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-      dispatch(clearAllJobErrors());
-    }
-    dispatch(fetchJobs(city, niche, searchKeyword));
-  }, [dispatch, error, city, niche]);
-
-  const handleSearch = () => {
-    dispatch(fetchJobs(city, niche, searchKeyword));
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prevFilters => ({ ...prevFilters, [name]: value }));
   };
 
-  const filterContainer = {
-    display: "flex",
-    flexDirection: "column",
-    gap: "12px",
-    backgroundColor: "#f8f9fa",
-    padding: "1.5rem",
-    borderRadius: "10px",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-    marginBottom: "20px",
-  };
-
-  const jobCard = {
-    backgroundColor: "#ffffff",
-    borderRadius: "12px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    padding: "1.5rem",
-    marginBottom: "15px",
-  };
-
-  const buttonStyle = {
-    backgroundColor: "#04ADE6", 
-    color: "#fff", 
-    padding: "12px 20px",  
-    borderRadius: "12px",  
-    textDecoration: "none",  
-    fontWeight: "600",  
-    fontSize: "16px",  
-    display: "inline-block",  
-    textAlign: "center",  
-    cursor: "pointer",  
-    transition: "all 0.3s ease",  
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",  
+  const toggleFilters = () => {
+    setFilters(prevFilters => ({ ...prevFilters, showFilters: !prevFilters.showFilters }));
   };
 
   return (
-    <>
-      {loading ? (
-        <Spinner />
-      ) : (
-        <section className="jobs">
+    <section className="jobs">
+      {loading ? <Spinner /> : (
+        <div>
           <div className="search-tab-wrapper">
             <input
               type="text"
-              value={searchKeyword}
-              onChange={(e) => setSearchKeyword(e.target.value)}
+              value={filters.searchKeyword}
+              onChange={handleFilterChange}
+              name="searchKeyword"
               placeholder="Search for jobs..."
             />
-            <CiSearch className="search-icon" onClick={handleSearch} />
+            <CiSearch className="search-icon" onClick={() => dispatch(fetchJobs(filters))} />
           </div>
-          <div className="wrapper">
-            <div className="filter-bar" style={filterContainer}>
-              <div className="cities">
-                <h2>🏙️ Filter by City</h2>
-                {cities.map((city, index) => (
-                  <div key={index}>
-                    <input
-                      type="checkbox"
-                      id={city}
-                      name="city"
-                      value={city}
-                      checked={selectedCity === city}
-                      onChange={() => handleCityChange(city)}
-                    />
-                    <label htmlFor={city}>{city}</label>
-                  </div>
-                ))}
-              </div>
-              <div className="cities">
-                <h2>📌 Filter by Field</h2>
-                {Fields.map((niche, index) => (
-                  <div key={index}>
-                    <input
-                      type="checkbox"
-                      id={niche}
-                      name="niche"
-                      value={niche}
-                      checked={selectedNiche === niche}
-                      onChange={() => handleNicheChange(niche)}
-                    />
-                    <label htmlFor={niche}>{niche}</label>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="container">
-              <div className="mobile-filter">
-                <select value={city} onChange={(e) => setCity(e.target.value)}>
-                  <option value="">Filter By City</option>
-                  <option value="All">All</option>
-                  {cities.map((city, index) => (
-                    <option value={city} key={index}>
-                      {city}
-                    </option>
-                  ))}
-                </select>
-                <select value={niche} onChange={(e) => setNiche(e.target.value)}>
-                  <option value="">Filter By Field</option>
-                  {Fields.map((niche, index) => (
-                    <option value={niche} key={index}>
-                      {niche}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="jobs_container">
-                {jobs && jobs.length > 0 ? (
-                  jobs.map((element) => (
-                    <div className="card" key={element._id} style={jobCard}>
-                       <Link
-                          to={`/jobDetails/${element._id}`}
-                          style={{
-                            position: "absolute",
-                            top: "10px",
-                            right: "10px",
-                            fontSize: "20px",
-                            color: "#010101",
-                          }}
-                        >
-                          <TbListDetails />
-                        </Link>
-                      {element.hiringMultipleCandidates ? (
-                        <p className="hiring-multiple">Hiring Multiple Candidates 👩‍💼👨‍💼👩‍💼</p>
-                      ) : (
-                        <p className="hiring">Hiring one candidate👨‍💼</p>
-                      )}
-                      <p className="title">{element.title}</p>
-                      <p className="company">
-                        <MdMapsHomeWork color='#010101' /> {element.companyName}
-                      </p>
-                      <p className="location">
-                        <MdPlace color='#010101' /> {element.location}
-                      </p>
-                      <p className="salary">
-                        <MdAttachMoney color='#010101' /> {element.salary}
-                      </p>
-                      <p className="posted">
-                        <span style={{ fontSize: "16px" }}>Posted on:</span>
-                        {element.jobPostedOn.substring(0, 10)}
-                      </p>
 
-                      <div className="btn-wrapper">
-                      <button
-  className="btn"
-  style={buttonStyle}
-  onClick={() => handleApplyClick(element._id)}
->
-  📨 Apply Now
-</button>
-
-                        <Link
-                          className="btn"
-                          style={{ ...buttonStyle, backgroundColor: "#b1dca0" }}
-                          to={`/jobDetails/${element._id}`}
-                        >
-                          🔍 See details
-                        </Link>
-                      </div>
-                    </div>
-                  ))
+          <div className="filter-bar">
+            <div className="filter-group">
+              <button
+                onClick={toggleFilters}
+                className="toggle-filters-btn"
+                aria-label={filters.showFilters ? "Hide filters" : "Show filters"}
+              >
+                {filters.showFilters ? (
+                  <><BsFilterSquareFill style={{ marginRight: "0.5rem" }} /> Less filters</>
                 ) : (
-                  <img src={img} alt="job-not-found" style={{ width: "100%" }} />
+                  <><BsFilterSquare style={{ marginRight: "0.5rem" }} /> More filters</>
                 )}
-              </div>
+              </button>
+            </div>
+
+            {/* Filter inputs */}
+            <div className="filter-group">
+              <label>🏢 Company Name</label>
+              <select
+                value={filters.companyName}
+                onChange={handleFilterChange}
+                name="companyName"
+              >
+                <option value="">All Companies</option>
+                {(companyNames || []).map((name, i) => (
+                  <option key={i} value={name}>{name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-group">
+              <label>💰 Minimum Salary</label>
+              <select
+                value={filters.salaryMin}
+                onChange={handleFilterChange}
+                name="salaryMin"
+              >
+                <option value={0}>All Salaries</option>
+                <option value={1500}>1,500+</option>
+                <option value={2500}>2,500+</option>
+              </select>
+            </div>
+
+            {/* Additional filters */}
+            <div className="filter-group">
+              <label>🏙️ City</label>
+              <select
+                value={filters.city}
+                onChange={handleFilterChange}
+                name="city"
+              >
+                <option value="">All Cities</option>
+                {cities.map((c, i) => <option key={i} value={c}>{c}</option>)}
+              </select>
+            </div>
+
+            <div className="filter-group">
+              <label>📌 Field</label>
+              <select
+                value={filters.field}
+                onChange={handleFilterChange}
+                name="field"
+              >
+                <option value="">All Fields</option>
+                {Fields.map((f, i) => <option key={i} value={f}>{f}</option>)}
+              </select>
+            </div>
+
+            {filters.showFilters && (
+              <>
+                <div className="filter-group">
+                  <label>💼 Contract Type</label>
+                  <select
+                    value={filters.jobType}
+                    onChange={handleFilterChange}
+                    name="jobType"
+                  >
+                    <option value="">All Types</option>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                  </select>
+                </div>
+
+                <div className="filter-group">
+                  <label>⏳ Experience years</label>
+                  <select
+                    value={filters.yearsOfExperience}
+                    onChange={handleFilterChange}
+                    name="yearsOfExperience"
+                  >
+                    <option value={0}>All</option>
+                    {[1, 2, 3, 4, 5].map(year => (
+                      <option key={year} value={year}>{year}+</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="filter-group">
+                  <label>🎓 Degree Level</label>
+                  <select
+                    value={filters.degreeLevel}
+                    onChange={handleFilterChange}
+                    name="degreeLevel"
+                  >
+                    <option value="">All Levels</option>
+                    <option value="Bachelor's">Bachelor's</option>
+                    <option value="Master's">Master's</option>
+                    <option value="PhD">PhD</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </>
+            )}
+          </div>
+
+          <div className="container">
+            <div className="jobs_container">
+              {jobs?.length > 0 ? jobs.map(job => (
+                <div className="card" key={job._id}>
+                  <Link to={`/jobDetails/${job._id}`} className="card-icon"><TbListDetails /></Link>
+                  <p className={job.hiringMultipleCandidates ? "hiring-multiple" : "hiring"}>{job.hiringMultipleCandidates ? "Hiring Multiple 👥" : "Hiring One 👤"}</p>
+                  <p className="title">{job.title}</p>
+                  <p className="company"><MdMapsHomeWork /> {job.companyName}</p>
+                  <p className="location"><MdPlace /> {job.location}</p>
+                  <p className="salary"><MdAttachMoney /> {job.salary}</p>
+                  <p className="posted"><span>Posted:</span> {job.jobPostedOn?.substring(0, 10)}</p>
+                  <div className="btn-wrapper">
+                    <button className="btn apply-btn" onClick={() => handleApplyClick(job._id)}>Apply Now</button>
+                    <Link className="btn details-btn" to={`/jobDetails/${job._id}`}>Details</Link>
+                  </div>
+                </div>
+              )) : (
+                <img src={img} alt="Not Found" style={{ width: '100%' }} />
+              )}
             </div>
           </div>
-        </section>
+        </div>
       )}
-    </>
+    </section>
   );
 };
 

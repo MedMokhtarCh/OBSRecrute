@@ -135,12 +135,12 @@ const MyApplications = () => {
             {applications.map((element) => (
               <div style={cardStyle} key={element._id} className="application-card">
                 <p style={subSecStyle}>
-                  <FaBriefcase /> <strong>Job:</strong>
-                  <Link to={`/jobDetails/${element.jobInfo.jobId}`} style={{ color: "#0288d1", marginLeft: "8px" }}>
-                    {element.jobInfo.jobTitle}
-                  </Link>
+                  
+                  
+                  <p style={subSecStyle}><FaBriefcase /> <strong>Job:</strong> {element.jobInfo.jobTitle}</p>
                   <Link to={`/jobDetails/${element.jobInfo.jobId}`} style={{ marginLeft: "8px" }}>
                     <FaEye style={{ color: "#0288d1", fontSize: "1.2rem" }} /> {/* Icône de l'œil */}
+                  
                   </Link>
                 </p>
 

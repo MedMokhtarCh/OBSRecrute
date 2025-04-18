@@ -9,19 +9,16 @@ import { FaPhoneFlip } from "react-icons/fa6";
 import { MdCategory, MdOutlineMailOutline } from "react-icons/md";
 import { RiLock2Fill } from "react-icons/ri";
 import { ImUserTie } from "react-icons/im";
-import FieldsArray from "../data/fields";
 import Swal from "sweetalert2";
-
+import FieldsArray from "../data/fields";
 const Register = () => {
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("Job Seeker");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
-  const [firstField, setFirstField] = useState("");
-  const [secondField, setSecondField] = useState("");
-  const [thirdField, setThirdField] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [company, setCompany] = useState("");
 
   const { loading, isAuthenticated, error, message } = useSelector(
@@ -40,13 +37,8 @@ const Register = () => {
       phone,
       address,
       password,
+     confirmPassword
     };
-
-    if (role === "Job Seeker") {
-      userData.firstChoice = firstField;
-      userData.SecondChoice = secondField;
-      userData.ThirdChoice = thirdField;
-    }
 
     if (role === "Employer") {
       userData.companyName = company;
@@ -77,192 +69,213 @@ const Register = () => {
         timer: 1300
       }).then(() => {
         if (isAuthenticated) {
-          navigateTo("/jobs");
+          navigateTo("/dashboard");
         }
       });
     }
   }, [dispatch, error, loading, isAuthenticated, message]);
-  
 
   return (
-    <>
-      <ToastContainer />
-      <section className="authPage">
-        <div className="container">
-          <div className="header">
-            <h3>Create a new account 📝</h3>
-          </div>
-          <form onSubmit={handleRegsiter}>
-            <div className="wrapper">
-              <div className="inputTag">
-                <label>Register As</label>
-                <div>
-                  <select
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                  >
-                    <option value="" disabled>Select Role</option>
-                    <option value="Employer">Register as an Employer 👔</option>
-                    <option value="Job Seeker">Register as a Job Seeker 💼</option>
-                  </select>
-                  <FaRegUser />
-                </div>
+    <div className="min-h-screen flex flex-col md:flex-row">
+      {/* Form Section */}
+      <div className="flex flex-col justify-center items-center w-full md:w-1/2 px-6 py-12 bg-[#E8F4FF]"> {/* Bleu clair */}
+      <div className="max-w-md w-full space-y-6">
+      <div className="text-center">
+  <h2 className="mt-4 text-sm text-gray-600">
+    Create a new account 📝
+  </h2>
+</div>
+
+<form onSubmit={handleRegsiter}>
+            {/* Role Selection */}
+            <div className="mb-2">
+              <label className="mt-4 block text-xs font-medium text-gray-700">
+                Register As
+              </label>
+              <div className="relative">
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                >
+                  <option value="Job Seeker">Job Seeker</option>
+                  <option value="Employer">Employer</option>
+                </select>
+                <FaRegUser className="absolute top-2 right-3 text-gray-400 text-lg" />
               </div>
-              <div className="inputTag">
-                <label>Name </label>
-                <div>
+            </div>
+
+            {/* Common Fields */}
+            <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-700">
+                  Name
+                </label>
+                <div className="relative">
                   <input
                     type="text"
                     placeholder="Your Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   />
-                  <FaPencilAlt />
+                  <FaPencilAlt className="absolute top-2 right-3 text-gray-400 text-lg" />
                 </div>
               </div>
-            </div>
-            <div className="wrapper">
-              <div className="inputTag">
-                <label>Email Address </label>
-                <div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700">
+                  Email Address
+                </label>
+                <div className="relative">
                   <input
                     type="email"
-                    placeholder="youremail@gmail.com"
+                    placeholder="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   />
-                  <MdOutlineMailOutline />
+                  <MdOutlineMailOutline className="absolute top-2 right-3 text-gray-400 text-lg" />
                 </div>
               </div>
-              <div className="inputTag">
-                <label>Phone Number </label>
-                <div>
-                  <input
-                    type="number"
-                    placeholder="111-222-333"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
-                  <FaPhoneFlip />
-                </div>
-              </div>
-            </div>
-            <div className="wrapper">
-              <div className="inputTag">
-                <label>Address </label>
-                <div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700">
+                  Address
+                </label>
+                <div className="relative">
                   <input
                     type="text"
-                    placeholder="Your Address"
+                    placeholder="Address"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
+                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   />
-                  <FaAddressBook />
+                  <FaAddressBook className="absolute top-2 right-3 text-gray-400 text-lg" />
                 </div>
               </div>
-              {role === "Employer" && (
-                <div className="inputTag">
-                  <label>Company </label>
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Your Company"
-                      value={company}
-                      onChange={(e) => setCompany(e.target.value)}
-                    />
-                    <ImUserTie />
-                  </div>
-                </div>
-              )}
             </div>
 
-            {role === "Job Seeker" && (
-              <>
-                <div className="wrapper">
-                  <div className="inputTag">
-                    <label>Your First Field</label>
-                    <div>
-                      <select
-                        value={firstField}
-                        onChange={(e) => setFirstField(e.target.value)}
-                      >
-                        <option value="" disabled style={{ color: "#999" }}>
-                          Your Field
-                        </option>
-                        {FieldsArray.map((field, index) => (
-                          <option key={index} value={field}>
-                            {field}
-                          </option>
-                        ))}
-                      </select>
-                      <MdCategory />
-                    </div>
-                  </div>
-                  <div className="inputTag">
-                    <label>Your Second Field </label>
-                    <div>
-                      <select
-                        value={secondField}
-                        onChange={(e) => setSecondField(e.target.value)}
-                      >
-                        <option value="" disabled style={{ color: "#999" }}>
-                          Your Field
-                        </option>
-                        {FieldsArray.map((field, index) => (
-                          <option key={index} value={field}>
-                            {field}
-                          </option>
-                        ))}
-                      </select>
-                      <MdCategory />
-                    </div>
-                  </div>
-                  <div className="inputTag">
-                    <label>Your Third Field </label>
-                    <div>
-                      <select
-                        value={thirdField}
-                        onChange={(e) => setThirdField(e.target.value)}
-                      >
-                        <option value="" disabled style={{ color: "#999" }}>
-                          Your Field
-                        </option>
-                        {FieldsArray.map((field, index) => (
-                          <option key={index} value={field}>
-                            {field}
-                          </option>
-                        ))}
-                      </select>
-                      <MdCategory />
-                    </div>
+            {/* Address and Phone */}
+            <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
+             
+            </div>
+
+            {/* Employer Specific Field */}
+            {role === "Employer" && (
+              <div>
+              <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2">
+              <div>
+                <label className="block text-xs font-medium text-gray-700">
+                  Phone Number
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="11-222-333"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                  />
+                  <FaPhoneFlip className="absolute top-2 right-3 text-gray-400 text-lg" />
+                </div>
+              </div>
+                <div className="mb-3">
+                  <label className="block text-xs font-medium text-gray-700">
+                    Company
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Your Company Name"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    />
+                    <ImUserTie className="absolute top-2 right-3 text-gray-400 text-lg" />
                   </div>
                 </div>
-              </>
+              </div>
+              </div>
             )}
-            <div className="wrapper">
-              <div className="inputTag">
-                <label>Password </label>
-                <div>
+
+            {/* Job Seeker Specific Fields */}
+            {role === "Job Seeker" && (
+              <div>
+                 <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-1">
+                 <div>
+                <label className="block text-xs font-medium text-gray-700">
+                  Phone Number
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="11-222-333"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                  />
+                  <FaPhoneFlip className="absolute top-2 right-3 text-gray-400 text-lg" />
+                </div>
+              </div>
+                </div>
+              </div>
+            )}
+
+          
+            <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div>
+                <label className="block text-xs font-medium text-gray-700">
+                  Password
+                </label>
+                <div className="relative">
                   <input
                     type="password"
                     placeholder="Your Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   />
-                  <RiLock2Fill />
+                  <RiLock2Fill className="absolute top-2 right-3 text-gray-400 text-lg" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700">
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <input
+                    type="password"
+                    placeholder="Confirm password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                  />
+                  <RiLock2Fill className="absolute top-2 right-3 text-gray-400 text-lg" />
                 </div>
               </div>
             </div>
-            <button type="submit" disabled={loading}>
-              {loading ? "Registering..." : "Register"}
-            </button>
-            <Link to="/login" className="loginLink">
-              Already have an account? Login 🔑
-            </Link>
+
+            <div className="mb-3">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-blue-600 text-white py-2 text-sm rounded-lg hover:bg-blue-700 transition duration-300 mt-4"
+              >
+                Register
+              </button>
+            </div>
+            <p className="text-center text-xs text-gray-600 mt-3">
+              Already have an account?{" "}
+              <Link to="/login" className="text-blue-600 font-medium hover:underline">
+                Login
+              </Link>
+            </p>
           </form>
         </div>
-      </section>
-    </>
+      </div>
+
+      {/* Image Section */}
+      <div className="hidden md:flex w-full md:w-1/2 bg-cover bg-center bg-[url('./assets/RegisterPhoto.jpg')]"></div>
+    </div>
   );
 };
 

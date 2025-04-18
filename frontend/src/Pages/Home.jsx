@@ -8,7 +8,7 @@ import Intro from '../Components/Intro'
 const Home = () => {
   return (
     <>
-   
+  
   <Intro/>
       <TopCategories/>
       <HowItWorks/>

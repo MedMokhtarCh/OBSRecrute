@@ -86,14 +86,31 @@ export const postJob = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const getAllJobs = catchAsyncErrors(async (req, res, next) => {
-  const { city, field, searchKeyword } = req.query;
+  const {
+    city,
+    field,
+    searchKeyword,
+    salaryMin,
+    companyName,
+    degreeLevel,
+    yearsOfExperience,
+    hiringMultipleCandidates,
+    jobType,
+  } = req.query;
+
   const query = {};
+
+  //  Filtrage par ville
   if (city) {
     query.location = city;
   }
+
+  // Filtrage par domaine
   if (field) {
     query.jobField = field;
   }
+
+  //  Recherche texte
   if (searchKeyword) {
     query.$or = [
       { title: { $regex: searchKeyword, $options: "i" } },
@@ -101,7 +118,44 @@ export const getAllJobs = catchAsyncErrors(async (req, res, next) => {
       { introduction: { $regex: searchKeyword, $options: "i" } },
     ];
   }
+
+  // Filtrage par fourchette de salaire
+  if (salaryMin) {
+    query.salary = {};
+    if (salaryMin) query.salary.$gte = parseInt(salaryMin);
+  }
+
+  // Recherche par nom d'entreprise
+  if (companyName) {
+    query.companyName = { $regex: companyName, $options: "i" };
+  }
+
+  //  Niveau de diplôme requis
+  if (degreeLevel) {
+    query["qualifications.degreeLevel"] = degreeLevel;
+  }
+
+  // Années d'expérience minimum
+  if (yearsOfExperience) {
+    query["qualifications.yearsOfExperience"] = {
+      $gte: parseInt(yearsOfExperience),
+    };
+  }
+
+  //  Recrutement multiple
+  if (hiringMultipleCandidates !== undefined) {
+    query.hiringMultipleCandidates = hiringMultipleCandidates === "true";
+  }
+
+  // Type de contrat (plusieurs types possibles)
+  if (jobType) {
+    const types = Array.isArray(jobType) ? jobType : [jobType];
+    query.jobType = { $in: types };
+  }
+
+  // Exécution de la recherche
   const jobs = await Job.find(query);
+
   res.status(200).json({
     success: true,
     jobs,
@@ -110,7 +164,24 @@ export const getAllJobs = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const getMyJobs = catchAsyncErrors(async (req, res, next) => {
-  const myJobs = await Job.find({ postedBy: req.user._id });
+  const { searchKeyword } = req.query;
+
+  const query = {
+    postedBy: req.user._id,
+  };
+
+  if (searchKeyword) {
+    query.$or = [
+      { title: { $regex: searchKeyword, $options: "i" } },
+      { jobType: { $regex: searchKeyword, $options: "i" } },
+      { introduction: { $regex: searchKeyword, $options: "i" } },
+      { jobField: { $regex: searchKeyword, $options: "i" } },
+      { location: { $regex: searchKeyword, $options: "i" } },
+    ];
+  }
+
+  const myJobs = await Job.find(query);
+
   res.status(200).json({
     success: true,
     myJobs,
@@ -119,6 +190,7 @@ export const getMyJobs = catchAsyncErrors(async (req, res, next) => {
 
 export const deleteJob = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
+
   const job = await Job.findById(id);
   if (!job) {
     return next(new ErrorHandler("Oops! Job not found.", 404));
@@ -127,6 +199,18 @@ export const deleteJob = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: "Job deleted.",
+  });
+});
+export const getAllCompanyNames = catchAsyncErrors(async (req, res, next) => {
+  const jobs = await Job.find().select("companyName");
+
+  // Extraire uniquement les noms et retirer les doublons
+  const companyNames = [...new Set(jobs.map((job) => job.companyName))];
+
+  res.status(200).json({
+    success: true,
+    companyNames,
+    count: companyNames.length,
   });
 });
 
