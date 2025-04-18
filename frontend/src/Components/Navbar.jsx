@@ -20,18 +20,18 @@ const Navbar = () => {
       <div className={`links ${show ? "show" : ""}`}>
         <ul>
           <li><Link to="/" onClick={() => setShow(false)}>Home</Link></li>
-          {((isAuthenticated && user.role === "Job Seeker") || !isAuthenticated) && (
+          {isAuthenticated && user.role === "Job Seeker" && (
   <>
- <li>
-  <Link to="/favoriteJobs" onClick={() => setShow(false)} style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-    My <MdFavorite color="red" /> Jobs
-  </Link>
-</li>
+    <li>
+      <Link to="/favoriteJobs" onClick={() => setShow(false)} style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+        My <MdFavorite color="red" /> Jobs
+      </Link>
+    </li>
 
     <li><Link to="/jobs" onClick={() => setShow(false)}>Jobs</Link></li>
-    
   </>
 )}
+
 
           {isAuthenticated ? (
             <li><Link to="/dashboard" onClick={() => setShow(false)}>Dashboard</Link></li>

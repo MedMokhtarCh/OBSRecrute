@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-
+import { CiSearch } from "react-icons/ci"; // Assurez-vous d'importer l'icône
 import {
   clearAllJobErrors,
   deleteJob,
@@ -12,13 +12,22 @@ import Spinner from "./Spinner";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-
 const MyJobs = () => {
   const { loading, error, myJobs, message } = useSelector(
     (state) => state.jobs
   );
+  const [searchKeyword, setSearchKeyword] = useState("");
   const dispatch = useDispatch();
   const navigateTo = useNavigate();
+
+  const handleSearch = () => {
+    dispatch(getMyJobs(searchKeyword));
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, [searchKeyword]);
+
   useEffect(() => {
     dispatch(getMyJobs());
 
@@ -50,15 +59,23 @@ const MyJobs = () => {
   };
 
   const handleUpdateJob = (id) => {
-    if (id){navigateTo(`/dashboard/EditJob/${id}`);}
-    
-    
+    if (id) {
+      navigateTo(`/dashboard/EditJob/${id}`);
+    }
   };
 
   return (
     <div className="account_components">
       <h3>My Jobs</h3>
-
+      <div className="search-tab-wrapper">
+        <input
+          type="text"
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          placeholder="Search for jobs..."
+        />
+        <CiSearch className="search-icon" onClick={handleSearch} />
+      </div>
       {loading ? (
         <Spinner />
       ) : !myJobs ? (
@@ -83,21 +100,27 @@ const MyJobs = () => {
             <tbody>
               {myJobs.map((element) => (
                 <tr key={element._id}>
-                <td data-label="Job Title">{element.title}</td>
-                <td data-label="Job Field">{element.jobField}</td>
-                <td data-label="Salary">{element.salary}</td>
-                <td data-label="Location">{element.location}</td>
-                <td data-label="Job Type">{element.jobType}</td>
-                <td className="actions" data-label="Actions">
-  <button onClick={() => handleDeleteJob(element._id)}>🗑️ Delete</button>
-  <button onClick={() => handleUpdateJob(element._id)}>✏️ Update</button>
-  <Link to={`/dashboard/applications-for-job/${element._id}`}>📑 Applications</Link>
+                  <td data-label="Job Title">{element.title}</td>
+                  <td data-label="Job Field">{element.jobField}</td>
+                  <td data-label="Salary">{element.salary}</td>
+                  <td data-label="Location">{element.location}</td>
+                  <td data-label="Job Type">{element.jobType}</td>
+                  <td className="actions" data-label="Actions">
+                    <button onClick={() => handleDeleteJob(element._id)}>
+                      🗑️ Delete
+                    </button>
+                    <button onClick={() => handleUpdateJob(element._id)}>
+                      ✏️ Update
+                    </button>
+                    <Link to={`/dashboard/applications-for-job/${element._id}`}>
+                      📑 Applications
+                    </Link>
 
-  <Link  to={`/dashboard/jobDetails/${element._id}`}>🔍 See job details</Link> {/* ✅ ajouté ici */}
-</td>
-
-              </tr>
-              
+                    <Link to={`/dashboard/jobDetails/${element._id}`}>
+                      🔍 See job details
+                    </Link>
+                  </td>
+                </tr>
               ))}
             </tbody>
           </table>

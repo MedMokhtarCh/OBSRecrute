@@ -243,19 +243,33 @@ export const postJob = (data) => async (dispatch) => {
   }
 };
 
-export const getMyJobs = () => async (dispatch) => {
-  dispatch(jobSlice.actions.requestForMyJobs());
-  try {
-    const response = await axios.get(
-      `http://localhost:4002/api/v1/job/getmyjobs`,
-      { withCredentials: true }
-    );
-    dispatch(jobSlice.actions.successForMyJobs(response.data.myJobs));
-    dispatch(jobSlice.actions.clearAllErrors());
-  } catch (error) {
-    dispatch(jobSlice.actions.failureForMyJobs(error.response.data.message));
-  }
-};
+export const getMyJobs =
+  (searchKeyword = "") =>
+  async (dispatch) => {
+    dispatch(jobSlice.actions.requestForMyJobs());
+    try {
+      let link = "http://localhost:4002/api/v1/job/getmyjobs";
+      let queryParams = [];
+
+      if (searchKeyword) {
+        queryParams.push(`searchKeyword=${encodeURIComponent(searchKeyword)}`);
+      }
+
+      if (queryParams.length > 0) {
+        link += `?${queryParams.join("&")}`;
+      }
+
+      const response = await axios.get(link, { withCredentials: true });
+      dispatch(jobSlice.actions.successForMyJobs(response.data.myJobs));
+      dispatch(jobSlice.actions.clearAllErrors());
+    } catch (error) {
+      dispatch(
+        jobSlice.actions.failureForMyJobs(
+          error.response?.data?.message || "Une erreur est survenue"
+        )
+      );
+    }
+  };
 
 export const deleteJob = (id) => async (dispatch) => {
   dispatch(jobSlice.actions.requestForDeleteJob());
