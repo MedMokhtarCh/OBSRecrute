@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { clearAllJobErrors, fetchJobs, getAllCompanyNames } from '../store/Slices/jobSlice';
@@ -13,8 +13,9 @@ import Swal from 'sweetalert2';
 import cities from '../data/cities';
 import Fields from '../data/fields';
 import img from "../assets/Image-not-found.png";
-import { BsFilterSquare,BsFilterSquareFill } from "react-icons/bs";
-import { MdFavoriteBorder , MdFavorite} from "react-icons/md";
+import { BsFilterSquare, BsFilterSquareFill } from "react-icons/bs";
+import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
+import debounce from 'lodash.debounce';
 const Jobs = () => {
   const [city, setCity] = useState("");
   const [field, setField] = useState("");
@@ -31,45 +32,47 @@ const Jobs = () => {
   const navigate = useNavigate();
   const { jobs, loading, error, companyNames } = useSelector((state) => state.jobs);
   const { isAuthenticated, user } = useSelector((state) => state.user);
-const favorites = user?.favorites || [];
+  const favorites = user?.favorites || [];
 
-const toggleFavorite = (jobId) => {
-  if (!isAuthenticated) {
-    Swal.fire({
-      title: 'Authentication Required',
-      text: 'You must log in to manage favorites!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Login',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate("/login");
-      }
-    });
-    return;
-  }
+  const toggleFavorite = (jobId) => {
+    if (!isAuthenticated) {
+      Swal.fire({
+        title: 'Authentication Required',
+        text: 'You must log in to manage favorites!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Login',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login");
+        }
+      });
+      return;
+    }
 
-  if (favorites.includes(jobId)) {
-    dispatch(removeFavoriteJob(jobId));
-  } else {
-    dispatch(addFavoriteJob(jobId));
-  }
-};
-
-  const handleSearch = () => {
-    dispatch(fetchJobs(
-      city,
-      field,
-      searchKeyword,
-      salaryMin,
-      companyName,
-      degreeLevel,
-      yearsOfExperience,
-      jobType,
-      hiringMultipleCandidates === "" ? null : hiringMultipleCandidates
-    ));
+    if (favorites.includes(jobId)) {
+      dispatch(removeFavoriteJob(jobId));
+    } else {
+      dispatch(addFavoriteJob(jobId));
+    }
   };
 
+  const debouncedSearch = useCallback(
+    debounce(() => {
+      dispatch(fetchJobs(
+        city,
+        field,
+        searchKeyword,
+        salaryMin,
+        companyName,
+        degreeLevel,
+        yearsOfExperience,
+        jobType,
+        hiringMultipleCandidates === '' ? null : hiringMultipleCandidates
+      ));
+    }, 300),
+    [city, field, searchKeyword, salaryMin, companyName, degreeLevel, yearsOfExperience, jobType, hiringMultipleCandidates, dispatch]
+  );
   useEffect(() => {
     dispatch(getAllCompanyNames());
   }, [dispatch]);
@@ -82,9 +85,12 @@ const toggleFavorite = (jobId) => {
   }, [error, dispatch]);
 
   useEffect(() => {
-    handleSearch(); // fetch jobs initially and when filters change
-    // eslint-disable-next-line
-  }, [city, field, searchKeyword, salaryMin, companyName, degreeLevel, yearsOfExperience, jobType, hiringMultipleCandidates]);
+    debouncedSearch();
+  }, [debouncedSearch]);
+
+
+ 
+
 
   const handleApplyClick = (jobId) => {
     if (!isAuthenticated) {
@@ -103,6 +109,7 @@ const toggleFavorite = (jobId) => {
       navigate(`/post/application/${jobId}`);
     }
   };
+
   return (
     <section className="jobs">
       {loading ? <Spinner /> : (
@@ -115,7 +122,7 @@ const toggleFavorite = (jobId) => {
               onChange={(e) => setSearchKeyword(e.target.value)}
               placeholder="Search for jobs..."
             />
-            <CiSearch className="search-icon" onClick={handleSearch} />
+            <CiSearch className="search-icon" />
           </div>
 
           {/* Filters */}
@@ -140,6 +147,7 @@ const toggleFavorite = (jobId) => {
               </button>
             </div>
 
+            {/* Filter controls */}
             <div className="filter-group">
               <label>🏢 Company Name</label>
               <select value={companyName} onChange={(e) => setCompanyName(e.target.value)}>
@@ -232,17 +240,16 @@ const toggleFavorite = (jobId) => {
                 <div className="card" key={job._id}>
                   <Link to={`/jobDetails/${job._id}`} className="card-icon"><TbListDetails /></Link>
                   <button
-  className="favorite-btn"
-  onClick={() => toggleFavorite(job._id)}
-  title={favorites.includes(job._id) ? "Remove from favorites" : "Add to favorites"}
->
-{favorites.includes(job._id) ? (
-  <MdFavorite size={30} />
-) : (
-  <MdFavoriteBorder size={30} />
-)}
-
-</button>
+                    className="favorite-btn"
+                    onClick={() => toggleFavorite(job._id)}
+                    title={favorites.includes(job._id) ? "Remove from favorites" : "Add to favorites"}
+                  >
+                    {favorites.includes(job._id) ? (
+                      <MdFavorite size={30} />
+                    ) : (
+                      <MdFavoriteBorder size={30} />
+                    )}
+                  </button>
 
                   <p className={job.hiringMultipleCandidates ? "hiring-multiple" : "hiring"}>
                     {job.hiringMultipleCandidates ? "Hiring Multiple 👥" : "Hiring One 👤"}
@@ -254,8 +261,6 @@ const toggleFavorite = (jobId) => {
                   <p className="posted"><span>Posted:</span> {job.jobPostedOn?.substring(0, 10)}</p>
                   <div className="btn-wrapper">
                     <button className="btn apply-btn" onClick={() => handleApplyClick(job._id)}>Apply Now</button>
-                 
-
                     <Link className="btn details-btn" to={`/jobDetails/${job._id}`}>Details</Link>
                   </div>
                 </div>

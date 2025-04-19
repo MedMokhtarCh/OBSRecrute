@@ -94,7 +94,6 @@ export const updateProfile = (data) => async (dispatch) => {
       data,
       {
         withCredentials: true,
-        headers: { "Content-Type": "application/json" },
       }
     );
     dispatch(updateProfileSlice.actions.updateProfileSuccess());
