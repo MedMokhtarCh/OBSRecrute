@@ -1,0 +1,121 @@
+.jobs-table {
+  width: 70%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  margin: 30px auto; /* <-- Centre horizontalement et ajoute de l'espace au-dessus */
+}
+
+
+.jobs-table thead {
+  background-color: #0077b6;
+  color: #ffffff;
+  text-align: left;
+}
+
+.jobs-table th,
+.jobs-table td {
+  padding: 16px 20px;
+  font-size: 15px;
+  border: 1px solid #e0e0e0;
+}
+
+.jobs-table tbody tr {
+  transition: background 0.3s ease;
+}
+
+.jobs-table tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+.jobs-table td.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.jobs-table td.actions button,
+.jobs-table td.actions a {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  text-decoration: none;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.jobs-table td.actions button {
+  background-color: #ef4444;
+}
+
+.jobs-table td.actions button:hover {
+  background-color: #b91c1c;
+}
+
+.jobs-table td.actions a {
+  background-color: #0ea5e9;
+}
+
+.jobs-table td.actions a:hover {
+  background-color: #0369a1;
+}
+
+.jobs-table-wrapper {
+  overflow-x: auto;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .jobs-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .jobs-table thead {
+    display: none;
+  }
+
+  .jobs-table tbody tr {
+    display: block;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    padding: 12px;
+  }
+
+  .jobs-table td {
+    display: block;
+    text-align: left;
+    padding: 10px;
+    position: relative;
+    font-size: 14px;
+    padding-left: 120px;
+  }
+
+  .jobs-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-weight: bold;
+    color: #555;
+    font-size: 13px;
+  }
+
+  .jobs-table td.actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .jobs-table td.actions button,
+  .jobs-table td.actions a {
+    width: 100%;
+    text-align: center;
+  }
+}

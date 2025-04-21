@@ -1,0 +1,113 @@
+.authPagee {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  background-image: url('../assets/RegisterPhoto.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 30px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.authPagee::before {
+  content: "";
+ 
+
+
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(247, 219, 220, 0.4);
+
+  position: relative;
+  z-index: 2;
+}
+
+/* Conteneur formulaire */
+
+
+/* Titre */
+.form-title h2 {
+
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 5rem;
+  color: #333;
+}
+
+/* Groupe de champs */
+.form-group {
+  margin-top: -30px;
+  margin-bottom: 1.2rem;
+  width: 100%;
+}
+
+/* Champs avec icône */
+.input-icon {
+  position: relative;
+}
+
+.input-icon input,
+.input-icon select {
+  width: 100%;
+
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  transition: 0.2s ease;
+}
+
+.input-icon input:focus,
+.input-icon select:focus {
+  outline: none;
+  border-color: #5b82f7;
+  background-color: #fff;
+}
+
+/* Icône positionnée à droite */
+.input-icon .icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
+}
+
+/* Grille pour les champs en ligne */
+.grid-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+
+
+/* Texte centré */
+.text-center {
+  text-align: center;
+  margin-top: 1rem;
+  color: #666;
+}
+
+.link {
+  color: #5b82f7;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .grid-two {
+    grid-template-columns: 1fr;
+  }
+}

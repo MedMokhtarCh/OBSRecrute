@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 @import "tailwindcss";
@@ -17,7 +18,7 @@
   overflow-x: hidden;
   font-family: 'Inter', sans-serif;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 18px;
 }
 input::-webkit-inner-spin-button,
 input::-webkit-outer-spin-button {
@@ -82,8 +83,6 @@ input::-webkit-outer-spin-button {
   transition: 0.3s;
   cursor: pointer;
 }
-
-
 
 /* Modern Navbar Styling */
 
@@ -211,10 +210,11 @@ input::-webkit-outer-spin-button {
   }
 }
 
-
-
-
 /* Modern Navbar Styling */
+
+
+
+
 
 
 
@@ -269,6 +269,9 @@ input::-webkit-outer-spin-button {
     font-size: 1.5rem;
   }
 }
+
+
+
 
 
 
@@ -391,6 +394,9 @@ footer div ul a span:first-child {
 
 
 
+
+
+
 .hero {
   min-height: 80vh;
   display: flex;
@@ -467,6 +473,9 @@ footer div ul a span:first-child {
 }
 
 
+
+
+
 .services {
   padding: 50px 0;
   display: flex;
@@ -514,6 +523,10 @@ footer div ul a span:first-child {
     padding: 50px 20px;
   }
 }
+
+
+
+
 
 .howItWorks {
   padding: 50px 110px;
@@ -626,7 +639,7 @@ footer div ul a span:first-child {
   padding: 30px;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  
   font-family: 'Segoe UI', sans-serif;
   display: flex;
   flex-direction: column;
@@ -653,7 +666,7 @@ footer div ul a span:first-child {
   height: 140px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #04ADE6;
+  border: 2px solid #04ADE6;
   box-shadow: 0 4px 12px rgba(4, 173, 230, 0.3);
 }
 
@@ -671,10 +684,11 @@ footer div ul a span:first-child {
   align-items: center;
   font-weight: 600;
   margin-bottom: 8px;
-  color: #333;
+  color: #131212;
   font-size: 0.95rem;
   gap: 8px;
 }
+
 
 .account_components input {
   width: 100%;
@@ -687,8 +701,8 @@ footer div ul a span:first-child {
 }
 
 .account_components input:disabled {
-  background-color: #f1f3f5;
-  color: #444;
+  background-color: #e8e8e9;
+  color: #716f6f;
   cursor: not-allowed;
 }
 
@@ -696,12 +710,12 @@ footer div ul a span:first-child {
 .account_components > div {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 }
 
 /* Section spacing */
 .account_components > div:not(:first-of-type):not(:last-child) {
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   border-bottom: 1px solid #eee;
 }
 
@@ -883,7 +897,14 @@ footer div ul a span:first-child {
 
 
 
-/* Jobs.css */
+
+
+
+
+
+
+
+/* Jobs page.css */
 /* Reset de base */
 * {
   margin: 0;
@@ -994,7 +1015,6 @@ footer div ul a span:first-child {
  
   transform: scale(1.05); /* Effet de zoom léger */
 }
-
 
 /* JOB LIST */
 .container {
@@ -1149,7 +1169,7 @@ footer div ul a span:first-child {
 
 
 
-
+/* dashboard
 /* dashboard first page  */
 
 .account {
@@ -1225,7 +1245,7 @@ footer div ul a span:first-child {
   color: red;
 }
 
-/* Le parent contenant la sidebar doit avoir position: relative */
+/* Le parent contenant la sidebar */
 
 .layout {
   display: flex;
@@ -1401,6 +1421,11 @@ footer div ul a span:first-child {
   padding: 1rem;
   flex-direction: column;
 }
+
+
+
+
+/*update profil */ 
 .update-profile {
   width: 95%;
   max-width: 900px;
@@ -1423,153 +1448,6 @@ footer div ul a span:first-child {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* Headings */
-.update-profile h3 {
-  font-size: 26px;
-  color: #374151;
-  font-weight: 700;
-  margin-bottom: 25px;
-  text-align: center;
-}
-
-/* Labels */
-.update-profile label {
-  font-size: 13px;
-  color: #444;
-  font-weight: 600;
-  margin-bottom: 6px;
-  display: block;
-}
-
-/* Inputs */
-.update-profile input[type="text"],
-.update-profile input[type="email"],
-.update-profile input[type="number"],
-.update-profile input[type="file"],
-.update-profile select,
-.update-profile textarea {
-  width: 100%;
-  padding: 10px 14px;
-  margin-top: 4px;
-  margin-bottom: 16px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background: #fafafa;
-  box-shadow: inset 2px 2px 6px #e0e0e0, inset -2px -2px 6px #ffffff;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.update-profile input:focus,
-.update-profile select:focus,
-.update-profile textarea:focus {
-  outline: none;
-  background: #fff;
-  box-shadow: 0 0 0 2px rgba(60, 130, 230, 0.2);
-}
-
-/* Buttons */
-.update-profile button {
-  background-color: #4f46e5;
-  color: white;
-  padding: 10px 22px;
-  font-size: 14px;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-  box-shadow: 0 3px 8px rgba(79, 70, 229, 0.3);
-}
-
-.update-profile button:hover {
-  background-color: #4338ca;
-}
-
-.update-profile button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-/* Form group spacing */
-.update-profile .form-group {
-  margin-bottom: 24px;
-}
-
-/* Dynamic Fields */
-.update-profile .dynamic-fields {
-  margin-top: 24px;
-}
-
-.update-profile .dynamic-fields .field-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 16px;
-  align-items: flex-start;
-}
-
-.update-profile .dynamic-fields input,
-.update-profile .dynamic-fields textarea {
-  flex: 1;
-}
-
-.update-profile .dynamic-fields button {
-  width: auto;
-  padding: 6px 12px;
-  font-size: 12px;
-  border-radius: 6px;
-  font-weight: 500;
-  box-shadow: none;
-}
-
-/* Remove Button */
-.update-profile .dynamic-fields .remove-button {
-  background-color: #ef4444;
-  color: white;
-}
-
-.update-profile .dynamic-fields .remove-button:hover {
-  background-color: #dc2626;
-}
-
-/* Add Button */
-.update-profile .dynamic-fields .add-button {
-  background-color: #10b981;
-  color: white;
-}
-
-.update-profile .dynamic-fields .add-button:hover {
-  background-color: #059669;
-}
-
-/* Profile Picture */
-.profile-picture-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.profile-picture-preview {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #4f46e5;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
-}
-
-/* File input */
-input[type="file"] {
-  background: none;
-  border: none;
-  margin-top: 8px;
-  font-size: 13px;
 }
 
 
@@ -1698,6 +1576,7 @@ input[type="file"] {
   justify-content: flex-end;
 }
 
+/* update password button */
 .save_change_btn_wrapper {
   background: linear-gradient(135deg, #74c6e5, #04ADE6); /* dégradé plus dynamique */
   color: #ffffff;
@@ -1721,6 +1600,7 @@ input[type="file"] {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
+/* update password button */
 
 .account_components input::file-selector-button {
   width: 100%;
@@ -1768,6 +1648,10 @@ input[type="file"] {
 }
 
 
+
+
+
+/* My jobs table */
 .jobs-table {
   width: 100%;
   border-collapse: collapse;
@@ -1891,6 +1775,9 @@ input[type="file"] {
     text-align: center;
   }
 }
+
+
+
 
 /* Applications Cards */
 .account_components .applications_container {

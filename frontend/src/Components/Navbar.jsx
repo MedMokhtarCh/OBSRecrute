@@ -5,6 +5,8 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { FaSun, FaMoon } from "react-icons/fa";
 import logo from "../assets/logo1.png";
 import { MdFavorite } from "react-icons/md";
+import "../styles/Navbar.css";
+
 const Navbar = () => {
   const [show, setShow] = useState(false);
   const [theme, setTheme] = useState("light");

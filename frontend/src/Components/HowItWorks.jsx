@@ -2,6 +2,7 @@ import React from 'react'
 import { LuUserPlus } from "react-icons/lu";
 import { VscTasklist } from "react-icons/vsc";
 import { BiSolidLike } from "react-icons/bi";
+import '../styles/HowItWorks.css';
 
 const HowItWorks = () => {
   return (

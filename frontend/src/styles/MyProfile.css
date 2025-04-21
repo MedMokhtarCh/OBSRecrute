@@ -1,0 +1,182 @@
+/* Global Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f3f6fb;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Profile Container */
+.account_components {
+    width: 90%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+}
+
+/* Title Styling */
+.account_components h3 {
+    font-size: 40px;
+    color: #04ADE6;
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #04ADE6;
+}
+
+.profile-picture-container {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture-container img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Inputs and Labels */
+.account_components label {
+    font-size: 14px;
+    color: #282d2e;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.account_components input {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    color: #444;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.account_components input:disabled {
+    background-color: #f0f0f0;
+    color: #888;
+}
+
+.account_components input:hover:not(:disabled) {
+    border-color: #04ADE6;
+    background-color: #f1faff;
+}
+
+.account_components input:focus {
+    outline: none;
+    border-color: #04ADE6;
+    background-color: #f1faff;
+}
+
+/* Section Styling */
+.account_components div {
+    margin-bottom: 20px;
+}
+
+.account_components .section-title {
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.account_components .section-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.account_components .skills input,
+.account_components .languages input {
+    background-color: #f1f4f7;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+.account_components .skills label, 
+.account_components .languages label {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.account_components .languages, 
+.account_components .skills {
+    display: flex;
+    flex-direction: column;
+}
+
+.account_components .languages input,
+.account_components .skills input {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .account_components {
+        padding: 20px;
+        width: 90%;
+        grid-template-columns: 1fr;
+    }
+
+    .profile-picture img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .account_components h3 {
+        font-size: 24px;
+    }
+
+    .account_components input {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    .account_components label {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .account_components {
+        padding: 15px;
+        width: 90%;
+    }
+
+    .account_components h3 {
+        font-size: 20px;
+    }
+
+    .profile-picture img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .account_components input {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .account_components label {
+        font-size: 12px;
+    }
+}

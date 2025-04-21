@@ -1,0 +1,277 @@
+/* === Amélioration du style pour la section .account === */
+
+
+  
+  /* === Header pour le component === */
+  .component_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+  }
+  
+  .component_header p {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .icons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .manage-icon {
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .manage-icon:hover {
+    transform: scale(1.1); /* Effet de zoom sur l'icône */
+  }
+  
+
+
+  /* === Layout de la sidebar === */
+  .layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* === Sidebar Style === */
+  .sidebar {
+    width: 200px;
+    background-color: #ebf0f7;
+    padding: 15px;
+    transition: all 0.3s ease;
+    display: flex;
+    padding-top: 10px; 
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .sidebar.collapsed {
+    width: 60px;
+  }
+  
+  /* === Header de la Sidebar === */
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .toggle-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+ /* === Liens dans la Sidebar === */
+.sidebar-links {
+  
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  
+  .sidebar-links a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Un peu plus d'espace entre l'icône et le texte */
+    transition: all 0.3s ease; /* Ajout d'une transition fluide pour tous les effets */
+   
+  }
+  
+  .sidebar-links a:hover {
+    background-color: #e6f0ff;
+    color: #83a8d0;
+    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3); /* Ombre plus marquée au survol pour l'effet de "lumière" */
+    transform: translateX(5px); /* Effet de déplacement léger pour l'animation */
+  }
+  
+  .sidebar-links a svg { /* Si vous avez des icônes SVG à côté des liens */
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+  
+  .sidebar-links a:hover svg {
+    transform: scale(1.1); /* Augmenter légèrement l'icône au survol */
+    color: #007bff; /* Change la couleur de l'icône au survol */
+  }
+  
+
+
+  .sidebar-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    border-top: 1px solid #ccc;
+    flex-direction: column;
+  }
+  
+  .sidebar-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  /* === Main Content === */
+  .main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #fff;
+  }
+  
+  .component_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .icon-btn {
+    font-size: 22px;
+    cursor: pointer;
+  }
+  
+
+  /* === Responsive Sidebar === */
+ /* === Responsive Sidebar === */
+@media (max-width: 768px) {
+    .sidebar {
+      position: relative;  /* Change de 'absolute' à 'relative' pour garder la sidebar dans le flux de la page */
+      height: 100vh;
+      width: 220px; /* Réduit la largeur de la sidebar sans la cacher */
+      box-shadow: none;
+    }
+  
+    .main-content {
+      padding: 10px;
+    }
+  
+    .sidebar-links a {
+      font-size: 14px;
+      padding: 8px 12px;
+    }
+  
+    .sidebar.collapsed {
+      width: 60px; /* Réduit la largeur mais la sidebar reste visible */
+    }
+  
+    .sidebar-links a {
+      font-size: 14px;
+      padding: 8px 12px;
+    }
+  }
+  
+  
+  .sidebar {
+    width: 220px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+  
+  .sidebar.collapsed {
+    width: 60px;
+  }
+  
+  .sidebar-links li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    font-size: 16px;
+  }
+  
+  .sidebar-links li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .sidebar-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    flex-direction: column;
+  }
+/* === Sidebar fermée === */
+.sidebar.collapsed {
+    width: 60px; /* Réduit la largeur de la sidebar */
+    overflow: hidden; /* Cache tout contenu qui dépasse */
+    padding: 10px 15px; /* Réduit le padding à l'intérieur de la sidebar */
+    background-color: #f5f7fa; /* Garder un fond neutre */
+    box-shadow: none; /* Enlève l'ombre pour donner un look plus épuré */
+  }
+  
+  .sidebar.collapsed .sidebar-links {
+    display: none; /* Cache les liens dans la sidebar quand elle est fermée */
+  }
+  
+  .sidebar.collapsed .sidebar-header {
+    justify-content: center; /* Centre le contenu de l'en-tête */
+  }
+  
+  .sidebar.collapsed .toggle-btn {
+    color: #333; /* Garde l'icône du bouton visible */
+    font-size: 20px;
+  }
+  
+  .sidebar.collapsed .sidebar-avatar {
+    margin-bottom: 10px; /* Ajoute un peu d'espace quand l'avatar est visible */
+    width: 30px; /* Réduit la taille de l'avatar */
+    height: 30px;
+  }
+  
+  .sidebar.collapsed .sidebar-footer {
+    display: none; /* Cache le pied de page quand la sidebar est fermée */
+  }
+  
+  /* === Lorsque la sidebar est ouverte === */
+  .sidebar.show {
+    width: 250px; /* Rétablit la largeur initiale */
+    padding: 20px; /* Rétablit le padding */
+  }
+  
+  .sidebar.show .sidebar-links {
+    display: flex; /* Affiche les liens quand la sidebar est ouverte */
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .sidebar.show .sidebar-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px;
+    border-top: 1px solid #ccc;
+    flex-direction: column;
+  }
+  
+  .sidebar.show .toggle-btn {
+    font-size: 24px; /* Garde l'icône de toggle grande */
+  }
+    

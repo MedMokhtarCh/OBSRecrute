@@ -119,10 +119,10 @@ export const getAllJobs = catchAsyncErrors(async (req, res, next) => {
     ];
   }
 
-  // Filtrage par fourchette de salaire
   if (salaryMin) {
-    query.salary = {};
-    if (salaryMin) query.salary.$gte = parseInt(salaryMin);
+    query.$expr = {
+      $gte: [{ $toInt: "$salary" }, parseInt(salaryMin)],
+    };
   }
 
   // Recherche par nom d'entreprise

@@ -8,6 +8,7 @@ import {
 import { getUser } from "../store/Slices/userSlice";
 import { FaRegEyeSlash, FaEye } from "react-icons/fa";
 import Swal from "sweetalert2"; // Assurez-vous que SweetAlert est correctement importé
+import '../styles/UpdatePassword.css';
 
 const UpdatePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
@@ -99,65 +100,75 @@ const UpdatePassword = () => {
   };
 
   return (
-    <div className="account_components update_password_component">
+    <div className="account_components">
       <h3>Update Password</h3>
+      
       <div>
-        <label>Current Password</label>
-        <input
-          type={showPassword ? "text" : "password"}
-          value={oldPassword}
-          onChange={(e) => setOldPassword(e.target.value)}
-        />
-        {showPassword ? (
-          <FaRegEyeSlash
-            className="eye_icon"
-            onClick={() => setShowPassword(!showPassword)}
-          />
-        ) : (
-          <FaEye
-            className="eye_icon"
-            onClick={() => setShowPassword(!showPassword)}
-          />
-        )}
-      </div>
-      <div>
-        <label>New Password</label>
-        <input
-          type={showPassword ? "text" : "password"}
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-        {showPassword ? (
-          <FaRegEyeSlash
-            className="eye_icon"
-            onClick={() => setShowPassword(!showPassword)}
-          />
-        ) : (
-          <FaEye
-            className="eye_icon"
-            onClick={() => setShowPassword(!showPassword)}
-          />
-        )}
-      </div>
-      <div>
-        <label>Confirm Password</label>
-        <input
-          type={showPassword ? "text" : "password"}
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        {showPassword ? (
-          <FaRegEyeSlash
-            className="eye_icon"
-            onClick={() => setShowPassword(!showPassword)}
-          />
-        ) : (
-          <FaEye
-            className="eye_icon"
-            onClick={() => setShowPassword(!showPassword)}
-          />
-        )}
-      </div>
+  <label>
+    {showPassword ? (
+      <FaRegEyeSlash
+      style={{marginRight:"10px"}}
+        onClick={() => setShowPassword(!showPassword)}
+      />
+    ) : (
+      <FaEye
+      style={{marginRight:"10px"}}
+        onClick={() => setShowPassword(!showPassword)}
+      />
+    )}
+    Current Password
+  </label>
+  <input
+    type={showPassword ? "text" : "password"}
+    value={oldPassword}
+    onChange={(e) => setOldPassword(e.target.value)}
+  />
+</div>
+
+<div>
+  <label>
+    {showPassword ? (
+      <FaRegEyeSlash
+       style={{marginRight:"10px"}}
+        onClick={() => setShowPassword(!showPassword)}
+      />
+    ) : (
+      <FaEye
+      style={{marginRight:"10px"}}
+        onClick={() => setShowPassword(!showPassword)}
+      />
+    )}
+    New Password
+  </label>
+  <input
+    type={showPassword ? "text" : "password"}
+    value={newPassword}
+    onChange={(e) => setNewPassword(e.target.value)}
+  />
+</div>
+
+<div>
+  <label>
+    {showPassword ? (
+      <FaRegEyeSlash
+      style={{marginRight:"10px"}}
+        onClick={() => setShowPassword(!showPassword)}
+      />
+    ) : (
+      <FaEye
+      style={{marginRight:"10px"}}
+        onClick={() => setShowPassword(!showPassword)}
+      />
+    )}
+    Confirm Password
+  </label>
+  <input
+    type={showPassword ? "text" : "password"}
+    value={confirmPassword}
+    onChange={(e) => setConfirmPassword(e.target.value)}
+  />
+</div>
+
       
         <button
            className="save_change_btn_wrapper"

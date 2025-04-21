@@ -167,12 +167,8 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   }
 
   const data = { ...req.body };
-
-  const requiredFields = ["name", "email", "phone", "address", "role"];
-  for (const field of requiredFields) {
-    if (!data[field]) {
-      return next(new ErrorHandler(`Le champ "${field}" est requis.`, 400));
-    }
+  if ("role" in data) {
+    delete data.role;
   }
 
   if (req.files?.profilePicture) {
@@ -190,10 +186,26 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
     };
   }
 
+  if (req.files?.companyLogo) {
+    const result = await cloudinary.uploader.upload(
+      req.files.companyLogo.tempFilePath,
+      {
+        folder: "companyLogos",
+        width: 300,
+        crop: "scale",
+      }
+    );
+    data.companyLogo = {
+      public_id: result.public_id,
+      url: result.secure_url,
+    };
+  }
+
   const jsonFields = [
     "diplomas",
     "technicalSkills",
     "softSkills",
+    "certifications",
     "languages",
     "education",
     "experiences",
@@ -204,9 +216,8 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   jsonFields.forEach((field) => {
     if (data[field] && typeof data[field] === "string") {
       try {
-        // Handle empty strings and invalid JSON gracefully
         if (data[field] === "") {
-          data[field] = []; // Set to empty array if it's an empty string
+          data[field] = [];
         } else {
           data[field] = JSON.parse(data[field]);
         }
@@ -221,25 +232,6 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
       }
     }
   });
-
-  if (req.files?.["companyProfile.logo"]) {
-    if (!data.companyProfile) {
-      data.companyProfile = {};
-    }
-
-    const result = await cloudinary.uploader.upload(
-      req.files["companyProfile.logo"].tempFilePath,
-      {
-        folder: "company_logos",
-        width: 300,
-        crop: "scale",
-      }
-    );
-    data.companyProfile.logo = {
-      public_id: result.public_id,
-      url: result.secure_url,
-    };
-  }
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, data, {
     new: true,

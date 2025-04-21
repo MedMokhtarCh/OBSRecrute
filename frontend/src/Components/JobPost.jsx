@@ -14,6 +14,7 @@ import FieldsArray from "../data/fields"; // Liste des secteurs d'activité
 import cities from "../data/cities"; // Liste des villes
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import '../styles/JobPost.css'
 const JobPost = () => {
   // États pour les données du job
   const [title, setTitle] = useState("");
@@ -87,7 +88,7 @@ dispatch(postJob(jobData));
   };
 
   return (
-    <div className="account_components">
+    <div >
       
       <h3>📢 Add Job Offer</h3>
       <form onSubmit={handlePostJob}>
@@ -134,31 +135,35 @@ dispatch(postJob(jobData));
         placeholder="Company Name"
       />
     </div>
-  
-          <div className="label-infoTag-wrapper">
-                    <label>Company/Job Introduction</label>
-                      <span>
-                        <CiCircleInfo /> Optional
-                      </span>
-                    </div>
-          <textarea
-            value={introduction}
-            onChange={(e) => setIntroduction(e.target.value)}
-            placeholder="Company / Job Introduction"
-            rows={3}
-          />
+    
         </div>
+        <div className="field-row">
+  <div>
+    <div className="label-infoTag-wrapper">
+      <label>Company/Job Introduction</label>
+      <span>
+        <CiCircleInfo /> Optional
+      </span>
+    </div>
+    <textarea
+      value={introduction}
+      onChange={(e) => setIntroduction(e.target.value)}
+      placeholder="Company/Job Introduction"
+      rows={4}
+    />
+  </div>
 
+  <div>
+    <label>Responsibilities</label>
+    <textarea
+      value={responsabilities}
+      onChange={(e) => setResponsibilities(e.target.value)}
+      placeholder="Job Responsibilities"
+      rows={4}
+    />
+  </div>
+</div>
 
-        <div>
-          <label>Responsabilities</label>
-          <textarea
-            value={responsabilities}
-            onChange={(e) => setResponsibilities(e.target.value)}
-            placeholder="Job Responsibilities"
-            rows={3}
-          />
-        </div>
         <div className="field-row">
         <div>
            <label> <GiGraduateCap color="black" style={{margin: '5px'}} />Degree Level</label>
@@ -218,20 +223,32 @@ dispatch(postJob(jobData));
         </div>
 </div>
 
-<div>
-          <div className="label-infoTag-wrapper">
-            <label>What We Offer</label>
-            <span>
-              <CiCircleInfo /> Optional
-            </span>
-          </div>
-          <textarea
-            value={offers}
-            onChange={(e) => setOffers(e.target.value)}
-            placeholder="What are we offering in return!"
-            rows={3}
-          />
-        </div>
+<div className="field-row">
+  <div style={{ gridColumn: "span 2" }}>
+    <div className="label-infoTag-wrapper">
+      <label>What We Offer</label>
+      <span>
+        <CiCircleInfo /> Optional
+      </span>
+    </div>
+    <textarea
+      value={offers}
+      onChange={(e) => setOffers(e.target.value)}
+      placeholder="What are we offering in return!"
+      rows={4}
+      style={{
+        width: "100%",
+        minHeight: "80px",
+        padding: "10px",
+        borderRadius: "8px",
+        border: "1px solid #ccc",
+        fontSize: "14px",
+        resize: "vertical",
+        boxSizing: "border-box"
+      }}
+    />
+  </div>
+</div>
 
         <div className="field-row">
         <div>
@@ -295,26 +312,33 @@ dispatch(postJob(jobData));
         </div> 
 
 </div>
-
-        <div>
-
-<div className="label-infoTag-wrapper">
-           <label>Hiring Multiple Candidates?</label>
-            <span>
- <CiCircleInfo /> Optional
-</span>
-         </div>
-
-
-<select
-value={hiringMultipleCandidates ? "true" : "false"}
-onChange={(e) => setHiringMultipleCandidates(e.target.value === "true")}
->
-<option value="">Hiring Multiple Candidates?</option>
-<option value="true">Yes</option>
-<option value="false">No</option>
-</select>
+<div className="field-row">
+  <div style={{ gridColumn: "span 2" }}>
+    <div className="label-infoTag-wrapper">
+      <label>Hiring Multiple Candidates?</label>
+      <span>
+        <CiCircleInfo /> Optional
+      </span>
+    </div>
+    <select
+      value={hiringMultipleCandidates ? "true" : "false"}
+      onChange={(e) => setHiringMultipleCandidates(e.target.value === "true")}
+      style={{
+        width: "100%",
+        padding: "10px",
+        borderRadius: "8px",
+        border: "1px solid #ccc",
+        fontSize: "14px",
+        boxSizing: "border-box"
+      }}
+    >
+      <option value="">Hiring Multiple Candidates?</option>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+  </div>
 </div>
+
 <FormControlLabel
   className="newsletter-checkbox"
   onChange={(e) => setNewsLetterSend(e.target.checked)}

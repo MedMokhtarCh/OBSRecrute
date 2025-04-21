@@ -138,7 +138,7 @@ const JobEdit = () => {
     dispatch(editJob(jobId, jobData));
   };
   return (
-    <div className="account_components">
+    <div >
        <IoArrowBackOutline size={24} onClick={() => navigate(-1)} />
       <h3>Edit the job ✏️</h3>
       
@@ -190,6 +190,7 @@ const JobEdit = () => {
         </div>
 </div>
         {/* Job Introduction */}
+        <div className="field-row">
         <div>
          
           <div className="label-infoTag-wrapper">
@@ -216,7 +217,7 @@ const JobEdit = () => {
             rows={3}
           />
         </div>
-
+</div>
         <div className="field-row">
         <div>
           <label> <GiGraduateCap color="black" style={{margin: '5px'}} />Degree Level</label>
@@ -282,19 +283,32 @@ const JobEdit = () => {
 </div>
 
 {/* Offers */}
-<div>
-          <div className="label-infoTag-wrapper">
-            <label>What We Offer</label>
-            <span>
-              <CiCircleInfo /> Optional
-            </span>
+
+        <div className="field-row">
+          <div style={{ gridColumn: "span 2" }}>
+            <div className="label-infoTag-wrapper">
+              <label>What We Offer</label>
+              <span>
+                <CiCircleInfo /> Optional
+              </span>
+            </div>
+            <textarea
+              value={offers}
+              onChange={(e) => setOffers(e.target.value)}
+              placeholder="What are we offering in return!"
+              rows={4}
+              style={{
+                width: "100%",
+                minHeight: "80px",
+                padding: "10px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                fontSize: "14px",
+                resize: "vertical",
+                boxSizing: "border-box"
+              }}
+            />
           </div>
-          <textarea
-            value={offers}
-            onChange={(e) => setOffers(e.target.value)}
-            placeholder="What are we offering in return!"
-            rows={3}
-          />
         </div>
       
         <div className="field-row">
@@ -365,22 +379,32 @@ const JobEdit = () => {
         </div>
         </div>
         {/* Hiring Multiple Candidates */}
-        <div>
-          <div className="label-infoTag-wrapper">
-            <label>Hiring Multiple Candidates?</label>
-            <span>
-              <CiCircleInfo /> Optional
-            </span>
-          </div>
-          <select
-            value={hiringMultipleCandidates ? "true" : "false"}
-            onChange={(e) => setHiringMultipleCandidates(e.target.value === "true")}
-          >
-            <option value="">Hiring Multiple Candidates?</option>
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
-        </div>
+        <div className="field-row">
+  <div style={{ gridColumn: "span 2" }}>
+    <div className="label-infoTag-wrapper">
+      <label>Hiring Multiple Candidates?</label>
+      <span>
+        <CiCircleInfo /> Optional
+      </span>
+    </div>
+    <select
+      value={hiringMultipleCandidates ? "true" : "false"}
+      onChange={(e) => setHiringMultipleCandidates(e.target.value === "true")}
+      style={{
+        width: "100%",
+        padding: "10px",
+        borderRadius: "8px",
+        border: "1px solid #ccc",
+        fontSize: "14px",
+        boxSizing: "border-box"
+      }}
+    >
+      <option value="">Hiring Multiple Candidates?</option>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+  </div>
+</div>
 
 
         

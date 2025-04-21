@@ -3,10 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { logout, clearAllUserErrors } from "../store/Slices/userSlice";
-import { MdLogout } from "react-icons/md";
+import { MdLogout , MdOutlineWork} from "react-icons/md";
 import { FaUserCog, FaHome, FaTachometerAlt, FaBox, FaUsers, FaUserCircle } from "react-icons/fa";
+import { RiLockPasswordFill } from "react-icons/ri";
+import { SlEnvolopeLetter } from "react-icons/sl";
+import { MdPostAdd } from "react-icons/md";
 import Swal from "sweetalert2";
-
+import '../styles/Dashboard.css';
+import { FaBars } from "react-icons/fa";
 const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { loading, isAuthenticated, error, user } = useSelector((state) => state.user);
@@ -56,9 +60,8 @@ const Dashboard = () => {
     <div className="layout">
       <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
         <div className="sidebar-header">
-          <button onClick={() => setCollapsed(!collapsed)} className="toggle-btn">
-            ☰
-          </button>
+        <FaBars onClick={() => setCollapsed(!collapsed)} className="toggle-btn"/>
+        
           {!collapsed && <h3></h3>}
         </div>
         <ul className="sidebar-links">
@@ -76,7 +79,7 @@ const Dashboard = () => {
           </li>
           <li>
             <Link to="/dashboard/update-password" onClick={handleLinkClick}>
-              🔒   {!collapsed && "Update Password"}
+            <RiLockPasswordFill />  {!collapsed && "Update Password"}
             </Link>
           </li>
 
@@ -84,17 +87,17 @@ const Dashboard = () => {
             <>
               <li>
                 <Link to="/dashboard/job-post" onClick={handleLinkClick}>
-                  📝   {!collapsed && "Post New Job"}
+                <MdPostAdd />   {!collapsed && "Post New Job"}
                 </Link>
               </li>
               <li>
                 <Link to="/dashboard/my-jobs" onClick={handleLinkClick}>
-                  📁   {!collapsed && "My Jobs"}
+                <MdOutlineWork /> {!collapsed && "My Jobs"}
                 </Link>
               </li>
               <li>
                 <Link to="/dashboard/applications" onClick={handleLinkClick}>
-                  📨   {!collapsed && "Applications"}
+                <SlEnvolopeLetter />   {!collapsed && "Applications"}
                 </Link>
               </li>
             </>
@@ -103,7 +106,7 @@ const Dashboard = () => {
           {user?.role === "Job Seeker" && (
             <li>
               <Link to="/dashboard/my-applications" onClick={handleLinkClick}>
-              📨    {!collapsed && "My Applications"}
+              <SlEnvolopeLetter />    {!collapsed && "My Applications"}
               </Link>
             </li>
           )}

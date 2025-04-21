@@ -38,6 +38,12 @@ const UserSchema = new mongoose.Schema({
       year: Number,
     },
   ],
+  certifications: [
+    {
+      title: String,
+      year: Number,
+    },
+  ],
 
   technicalSkills: [String],
   softSkills: [String],
@@ -66,12 +72,6 @@ const UserSchema = new mongoose.Schema({
       endDate: Date,
     },
   ],
-
-  fieldChoices: {
-    firstChoice: String,
-    SecondChoice: String,
-  },
-
   password: {
     type: String,
     required: true,
@@ -99,13 +99,13 @@ const UserSchema = new mongoose.Schema({
     },
   },
   companyProfile: {
-    logo: {
-      public_id: String,
-      url: String,
-    },
     description: String,
     sector: String,
     location: String,
+  },
+  companyLogo: {
+    public_id: String,
+    url: String,
   },
   favorites: [
     {

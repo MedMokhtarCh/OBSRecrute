@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { CiSearch } from "react-icons/ci"; // Assurez-vous d'importer l'icône
+import { CiSearch } from "react-icons/ci";
 import {
   clearAllJobErrors,
   deleteJob,
@@ -11,6 +11,7 @@ import {
 import Spinner from "./Spinner";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import "../styles/MyJobs.css";
 
 const MyJobs = () => {
   const { loading, error, myJobs, message } = useSelector(
@@ -65,52 +66,59 @@ const MyJobs = () => {
   };
 
   return (
-    <div className="account_components">
-     <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px', color: '#333' }}>
-  My Jobs
-</h3>
+    <div>
+      <h3
+        style={{
+          fontSize: "24px",
+          fontWeight: "bold",
+          marginBottom: "20px",
+          color: "#1e293b",
+          textAlign: "center",
+        }}
+      >
+        My Jobs
+      </h3>
 
-<div
-  style={{
-    display: 'flex', 
-    alignItems: 'center', 
-    maxWidth: '600px', 
-    width: '100%', 
-    margin: '0 auto', 
-    padding: '10px', 
-    backgroundColor: '#f5f5f5', 
-    borderRadius: '30px',
-
-  }}
->
-  <input
-    type="text"
-    value={searchKeyword}
-    onChange={(e) => setSearchKeyword(e.target.value)}
-    placeholder="Search for jobs..."
-    onClick={handleSearch}
-    style={{
-      flexGrow: 1, 
-      border: 'none', 
-      padding: '10px 15px', 
-      borderRadius: '25px', 
-      fontSize: '16px', 
-      outline: 'none', 
-      backgroundColor: '#fff', 
-      color: '#333', 
-      transition: 'border 0.3s ease',
-    }}
-    onFocus={(e) => e.target.style.border = '2px solid #4CAF50'}
-    onBlur={(e) => e.target.style.border = 'none'}
-  />
-</div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          maxWidth: "600px",
+          width: "100%",
+          margin: "0 auto",
+          padding: "10px",
+          backgroundColor: "#f5f5f5",
+          borderRadius: "30px",
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.05)",
+        }}
+      >
+        
+        <input
+          type="text"
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          placeholder="Search for jobs..."
+          style={{
+            flexGrow: 1,
+            border: "none",
+            padding: "10px 15px",
+            borderRadius: "25px",
+            fontSize: "16px",
+            outline: "none",
+            backgroundColor: "#fff",
+            color: "#333",
+            marginLeft: "10px",
+          }}
+        />
+        <CiSearch style={{ fontSize: "22px", marginLeft: "10px" }} />
+      </div>
 
       {loading ? (
         <Spinner />
       ) : !myJobs ? (
         <h1>Loading jobs...</h1>
       ) : myJobs.length === 0 ? (
-        <h1 style={{ fontSize: "1.4rem", fontWeight: "600" }}>
+        <h1 style={{ fontSize: "1.4rem", fontWeight: "600", textAlign: "center" }}>
           You have not posted any job!
         </h1>
       ) : (
@@ -144,7 +152,6 @@ const MyJobs = () => {
                     <Link to={`/dashboard/applications-for-job/${element._id}`}>
                       📑 Applications
                     </Link>
-
                     <Link to={`/dashboard/jobDetails/${element._id}`}>
                       🔍 See job details
                     </Link>

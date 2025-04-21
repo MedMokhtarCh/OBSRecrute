@@ -1,0 +1,66 @@
+.hero {
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    animation: fadeIn 0.8s ease-out;
+  }
+  
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+  }
+  
+  .hero h4 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #444;
+    margin-bottom: 2rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .hero .box {
+    background-color: white;
+    padding: 2rem;
+    margin: 0 auto;
+    max-width: 800px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  /* Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2.2rem;
+    }
+  
+    .hero h4 {
+      font-size: 1.2rem;
+    }
+  
+    .hero .box {
+      font-size: 1rem;
+      padding: 1.5rem;
+    }
+  }
+  

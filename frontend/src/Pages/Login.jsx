@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { clearAllUserErrors, login } from "../store/Slices/userSlice";
+import { toast } from "react-toastify";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLock2Fill } from "react-icons/ri";
 import Swal from "sweetalert2";
+import "../styles/login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { loading, isAuthenticated, error, message, user } = useSelector(
-    (state) => state.user
-  );
-
+  const { loading, isAuthenticated, error, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigateTo = useNavigate();
 
@@ -28,102 +27,95 @@ const Login = () => {
   useEffect(() => {
     if (error) {
       Swal.fire({
-        title: "Error during connection",
+        title: "Erreur de connexion",
         text: error,
         icon: "error",
-        confirmButtonText: "Close",
+        confirmButtonText: "Fermer",
       });
       dispatch(clearAllUserErrors());
     }
 
     if (isAuthenticated) {
       Swal.fire({
-        title: "Connection successful",
-        text: `Welcome back! ${user.name}`,
+        title: "Connexion réussie",
+        text: `Bienvenue ${user?.name || ""} 👋`,
         icon: "success",
-        showConfirmButton: false,
         timer: 1600,
+        showConfirmButton: false,
       }).then(() => {
         navigateTo("/dashboard");
       });
     }
-  }, [dispatch, error, loading, isAuthenticated, message]);
+  }, [dispatch, error, isAuthenticated, user]);
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
-      {/* Form Section */}
-      <div className="flex flex-col justify-center items-center w-full md:w-1/2 px-6 py-12 bg-[#E8F4FF]"> {/* Bleu clair */}
-        <div className="max-w-md w-full space-y-6">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-800">🔐 Login to your account</h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Welcome back! Please enter your credentials.
-            </p>
+    <section className="authPage">
+      <div className="image-container"></div>
+      <div className="container login-container">
+        
+        <form onSubmit={handleLogin}>
+        <div className="header">
+          <h3>🔐 Connexion</h3>
+        </div>
+      
+          <div className="inputTag">
+            <label>Email 📧</label>
+            <div>
+            <input
+  type="Email"
+  placeholder="Your@email.com"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  required
+  style={{ 
+    border: "none", 
+    borderBottom: "1px solid #ccc", 
+    outline: "none", 
+    backgroundColor: "transparent" 
+  }}
+/>
+
+              <MdOutlineMailOutline />
+            </div>
+          </div>
+          
+          <div className="inputTag">
+            <label>Password🔒</label>
+            <div>
+              <input
+                type="password"
+                placeholder="Your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                style={{ 
+                  border: "none", 
+                  borderBottom: "1px solid #ccc", 
+                  outline: "none", 
+                  backgroundColor: "transparent" 
+                }}
+              />
+              <RiLock2Fill />
+            </div>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-5">
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
-              <div className="mt-1 relative">
-                <input
-                  type="email"
-                  placeholder="  youremail@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                />
-                <MdOutlineMailOutline className="absolute top-2.5 right-3 text-gray-400 text-xl" />
-              </div>
-            </div>
+          <div className="link-container">
+            <Link to="/forgot-password"> Forgot your password?</Link>
+          </div>
 
-            {/* Password */}
-            <div>
-              <label className="pt-2 block text-sm font-medium text-gray-700">Password</label>
-              <div className="mt-1 relative">
-                <input
-                  type="password"
-                  placeholder="  Your Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                />
-                <RiLock2Fill className="absolute top-2.5 right-3 text-gray-400 text-xl" />
-              </div>
-            </div>
+          <button type="submit" disabled={loading}>
+            Login
+          </button>
 
-            {/* Forgot Password */}
-            <div className="text-right mt-4">
-              <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">
-                Forgot your password?
-              </Link>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300 mt-4"
-            >
-              Login
-            </button>
-          </form>
-
-          {/* Register */}
-          <p className="text-center text-sm text-gray-600 mt-4">
-            Don’t have an account?{" "}
-            <Link to="/register" className="text-blue-600 font-medium hover:underline">
+          <div className="link-containerRegister">
+            <Link to="/register"> Don’t have an account?{" "}
+          
               Register now
             </Link>
-          </p>
-        </div>
+          </div>
+        </form>
       </div>
-
-      {/* Image Section */}
-      <div className="hidden md:flex w-full md:w-1/2 bg-cover bg-center bg-[url('./assets/RegisterPhoto.jpg')]">
-    
-      </div>
-    </div>
+    </section>
   );
 };
 

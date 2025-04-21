@@ -1,7 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBriefcase, FaCalendarAlt, FaBuilding, FaGraduationCap, FaCertificate, FaLanguage } from "react-icons/fa";
-
+import { GrLocation } from "react-icons/gr";
+import { MdOutlineDescription } from "react-icons/md";
+import { SiFramework } from "react-icons/si";
+import '../styles/MyProfile.css'
 const MyProfile = () => {
   const { user } = useSelector((state) => state.user);
 
@@ -30,7 +33,15 @@ const MyProfile = () => {
    
         <div>
           {user?.profilePicture?.url ? (
-            <img src={user.profilePicture.url} alt="Profile" />
+            <img style={{
+              width: '140px',
+              height: '140px',
+              borderRadius: '50%',
+              objectFit: 'cover',
+              border: '2px solid #04ADE6',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              marginBottom: '15px',
+            }} src={user.profilePicture.url} alt="Profile" />
           ) : (
             <div>
               <span>No Image</span>
@@ -48,18 +59,35 @@ const MyProfile = () => {
 
       {/* Render Employer-specific details */}
       {user?.role === "Employer" && renderInput("Company Name", user?.companyName, FaBuilding)}
-      
+      {user?.role === "Employer" && renderInput("Company description", user?.companyProfile.description, MdOutlineDescription)}
+      {user?.role === "Employer" && renderInput("Company sector", user?.companyProfile.sector, SiFramework)}
+      {user?.role === "Employer" && renderInput("Company location", user?.companyProfile.location, GrLocation)}
      
-      {/* Render diplomas */}
-      {user?.diplomas && user.diplomas.length > 0 && (
+      {user?.role === "Employer" && (
+  <div>
+    <label>Company logo</label>
+    {user?.companyLogo?.url ? (
+      <img src={user.companyLogo.url} alt="logo" />
+    ) : (
+      <div>
+        <span>No company Image</span>
+      </div>
+    )}
+  </div>
+)}
+
+      
+      
+ {/* Render languages */}
+ {user?.languages && user.languages.length > 0 && (
         <div>
-          <label><FaGraduationCap color="#04ADE6" /> Diplomas</label>
-          {user.diplomas.map((diploma, index) => (
+          <label><FaLanguage color="#04ADE6" /> Languages</label>
+          {user.languages.map((lang, index) => (
             <div key={index}>
               <input
                 type="text"
                 disabled
-                value={`${diploma.title} from ${diploma.institution} (${diploma.year})`}
+                value={`${lang.name} (${lang.level})`}
                 onChange={(e) => e.target.value}
               />
             </div>
@@ -67,12 +95,31 @@ const MyProfile = () => {
         </div>
       )}
 
+
       {/* Render technical skills */}
       {user?.technicalSkills && user.technicalSkills.length > 0 && (
         <div>
           <label><FaBriefcase color="#04ADE6" /> Technical Skills</label>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {user.technicalSkills.map((skill, index) => (
+              <input
+                key={index}
+                type="text"
+                disabled
+                value={skill}
+                onChange={(e) => e.target.value}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+
+{user?.softSkills && user.softSkills.length > 0 && (
+        <div>
+          <label><FaBriefcase color="#04ADE6" /> Soft Skills</label>
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            {user.softSkills.map((skill, index) => (
               <input
                 key={index}
                 type="text"
@@ -101,6 +148,26 @@ const MyProfile = () => {
           ))}
         </div>
       )}
+
+
+{/* Render diplomas */}
+{user?.diplomas && user.diplomas.length > 0 && (
+        <div>
+          <label><FaGraduationCap color="#04ADE6" /> Diplomas</label>
+          {user.diplomas.map((diploma, index) => (
+            <div key={index}>
+              <input
+                type="text"
+                disabled
+                value={`${diploma.title} from ${diploma.institution} (${diploma.year})`}
+                onChange={(e) => e.target.value}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+
 
       {/* Render education */}
       {user?.education && user.education.length > 0 && (
@@ -136,22 +203,7 @@ const MyProfile = () => {
         </div>
       )}
 
-      {/* Render languages */}
-      {user?.languages && user.languages.length > 0 && (
-        <div>
-          <label><FaLanguage color="#04ADE6" /> Languages</label>
-          {user.languages.map((lang, index) => (
-            <div key={index}>
-              <input
-                type="text"
-                disabled
-                v value={`${lang.name} (${lang.level})`}
-                onChange={(e) => e.target.value}
-              />
-            </div>
-          ))}
-        </div>
-      )}
+     
     </div>
   );
 };

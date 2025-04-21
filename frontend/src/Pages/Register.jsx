@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { clearAllUserErrors, register } from "../store/Slices/userSlice";
 import { toast, ToastContainer } from "react-toastify";
+import Swal from "sweetalert2";
 import "react-toastify/dist/ReactToastify.css";
 import { FaAddressBook, FaPencilAlt, FaRegUser } from "react-icons/fa";
 import { FaPhoneFlip } from "react-icons/fa6";
-import { MdCategory, MdOutlineMailOutline } from "react-icons/md";
+import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLock2Fill } from "react-icons/ri";
 import { ImUserTie } from "react-icons/im";
-import Swal from "sweetalert2";
-import FieldsArray from "../data/fields";
+import '../styles/Register.css'
+
 const Register = () => {
   const [role, setRole] = useState("Job Seeker");
   const [name, setName] = useState("");
@@ -28,7 +29,7 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigateTo = useNavigate();
 
-  const handleRegsiter = (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
     const userData = {
       role,
@@ -37,7 +38,7 @@ const Register = () => {
       phone,
       address,
       password,
-     confirmPassword
+      confirmPassword,
     };
 
     if (role === "Employer") {
@@ -50,232 +51,166 @@ const Register = () => {
   useEffect(() => {
     if (error) {
       Swal.fire({
-        title: "Error during registration",
-        text: error, // Le message envoyé par le backend
+        title: "Erreur d'inscription",
+        text: error,
         icon: "error",
-        confirmButtonText: "Close",
-    
+        confirmButtonText: "Fermer",
       });
       dispatch(clearAllUserErrors());
     }
-  
-    if (message) {
+
+    if (message && isAuthenticated) {
       Swal.fire({
-        title: "Registration successful!",
-        position: "top-end",
+        title: "Inscription réussie 🎉",
         text: message,
         icon: "success",
+        timer: 2000,
         showConfirmButton: false,
-        timer: 1300
       }).then(() => {
-        if (isAuthenticated) {
-          navigateTo("/dashboard");
-        }
+        navigateTo("/dashboard");
       });
     }
   }, [dispatch, error, loading, isAuthenticated, message]);
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
-      {/* Form Section */}
-      <div className="flex flex-col justify-center items-center w-full md:w-1/2 px-6 py-12 bg-[#E8F4FF]"> {/* Bleu clair */}
-      <div className="max-w-md w-full space-y-6">
-      <div className="text-center">
-  <h2 className="mt-4 text-sm text-gray-600">
-    Create a new account 📝
-  </h2>
-</div>
+    <section className="authPagee">
+      <div className="form-section">
+        <div className="form-box">
+         
 
-<form onSubmit={handleRegsiter}>
-            {/* Role Selection */}
-            <div className="mb-2">
-              <label className="mt-4 block text-xs font-medium text-gray-700">
-                Register As
-              </label>
-              <div className="relative">
-                <select
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                >
-                  <option value="Job Seeker">Job Seeker</option>
-                  <option value="Employer">Employer</option>
-                </select>
-                <FaRegUser className="absolute top-2 right-3 text-gray-400 text-lg" />
+          <form onSubmit={handleRegister}>
+          <div className="form-title">
+            <h2>Create account 📝</h2>
+          </div>
+            <div className="grid-two">
+              <div className="form-group">
+                <label>Register as</label>
+                <div className="input-icon">
+                  <select value={role} onChange={(e) => setRole(e.target.value)}>
+                    <option value="Job Seeker">Candidate</option>
+                    <option value="Employer">Employer</option>
+                  </select>
+                  <FaRegUser className="icon" />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Name</label>
+                <div className="input-icon">
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                  <FaPencilAlt className="icon" />
+                </div>
               </div>
             </div>
 
-            {/* Common Fields */}
-            <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
-              <div>
-                <label className="block text-xs font-medium text-gray-700">
-                  Name
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Your Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                  />
-                  <FaPencilAlt className="absolute top-2 right-3 text-gray-400 text-lg" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-700">
-                  Email Address
-                </label>
-                <div className="relative">
+            <div className="grid-two">
+              <div className="form-group">
+                <label>Email</label>
+                <div className="input-icon">
                   <input
                     type="email"
-                    placeholder="email"
+                    placeholder="Email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   />
-                  <MdOutlineMailOutline className="absolute top-2 right-3 text-gray-400 text-lg" />
+                  <MdOutlineMailOutline className="icon" />
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-700">
-                  Address
-                </label>
-                <div className="relative">
+
+              <div className="form-group">
+                <label>Address</label>
+                <div className="input-icon">
                   <input
                     type="text"
                     placeholder="Address"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   />
-                  <FaAddressBook className="absolute top-2 right-3 text-gray-400 text-lg" />
+                  <FaAddressBook className="icon" />
                 </div>
               </div>
             </div>
 
-            {/* Address and Phone */}
-            <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
-             
-            </div>
-
-            {/* Employer Specific Field */}
-            {role === "Employer" && (
-              <div>
-              <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2">
-              <div>
-                <label className="block text-xs font-medium text-gray-700">
-                  Phone Number
-                </label>
-                <div className="relative">
+            <div className={role === "Employer" ? "grid-two" : "form-group"}>
+              <div className="form-group">
+                <label>Phone</label>
+                <div className="input-icon">
                   <input
                     type="text"
-                    placeholder="11-222-333"
+                    placeholder="06 12 34 56 78"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   />
-                  <FaPhoneFlip className="absolute top-2 right-3 text-gray-400 text-lg" />
+                  <FaPhoneFlip className="icon" />
                 </div>
               </div>
-                <div className="mb-3">
-                  <label className="block text-xs font-medium text-gray-700">
-                    Company
-                  </label>
-                  <div className="relative">
+
+              {role === "Employer" && (
+                <div className="form-group">
+                  <label>Company</label>
+                  <div className="input-icon">
                     <input
                       type="text"
-                      placeholder="Your Company Name"
+                      placeholder="Company name"
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
-                      className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                     />
-                    <ImUserTie className="absolute top-2 right-3 text-gray-400 text-lg" />
+                    <ImUserTie className="icon" />
                   </div>
                 </div>
-              </div>
-              </div>
-            )}
+              )}
+            </div>
 
-            {/* Job Seeker Specific Fields */}
-            {role === "Job Seeker" && (
-              <div>
-                 <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-1">
-                 <div>
-                <label className="block text-xs font-medium text-gray-700">
-                  Phone Number
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="11-222-333"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                  />
-                  <FaPhoneFlip className="absolute top-2 right-3 text-gray-400 text-lg" />
-                </div>
-              </div>
-                </div>
-              </div>
-            )}
-
-          
-            <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div>
-                <label className="block text-xs font-medium text-gray-700">
-                  Password
-                </label>
-                <div className="relative">
+            <div className="grid-two">
+              <div className="form-group">
+                <label>Password</label>
+                <div className="input-icon">
                   <input
                     type="password"
-                    placeholder="Your Password"
+                    placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   />
-                  <RiLock2Fill className="absolute top-2 right-3 text-gray-400 text-lg" />
+                  <RiLock2Fill className="icon" />
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-700">
-                  Confirm Password
-                </label>
-                <div className="relative">
+
+              <div className="form-group">
+                <label>Confirmation</label>
+                <div className="input-icon">
                   <input
                     type="password"
                     placeholder="Confirm password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   />
-                  <RiLock2Fill className="absolute top-2 right-3 text-gray-400 text-lg" />
+                  <RiLock2Fill className="icon" />
                 </div>
               </div>
             </div>
 
-            <div className="mb-3">
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-blue-600 text-white py-2 text-sm rounded-lg hover:bg-blue-700 transition duration-300 mt-4"
-              >
+            <div className="form-group">
+              <button type="submit" disabled={loading} className="btn-submit">
                 Register
               </button>
             </div>
-            <p className="text-center text-xs text-gray-600 mt-3">
+
+            <p className="text-center">
               Already have an account?{" "}
-              <Link to="/login" className="text-blue-600 font-medium hover:underline">
+              <Link to="/login" className="link">
                 Login
               </Link>
             </p>
           </form>
         </div>
       </div>
-
-      {/* Image Section */}
-      <div className="hidden md:flex w-full md:w-1/2 bg-cover bg-center bg-[url('./assets/RegisterPhoto.jpg')]"></div>
-    </div>
+    
+    </section>
   );
 };
 

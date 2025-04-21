@@ -83,7 +83,7 @@ const ApplicationsByJob = () => {
   };
   
   return (
-    <div className="account_components">
+    <div >
          <IoArrowBackOutline size={24} onClick={() => {
                 navigate(-1)}
                } />
@@ -101,7 +101,7 @@ const ApplicationsByJob = () => {
         <p>No applications for this job yet.</p>
       ) : (
         <div className="applications-table-wrapper" style={{ overflowX: "auto", marginTop: "20px" }}>
-          <table className="jobs-table" style={{ width: "100%", borderCollapse: "collapse" }}>
+          <table className="jobs-table" style={{ width: "70%", borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ backgroundColor: "#0077b6", color: "#fff" }}>
                 <th style={{ padding: "10px" }}>Candidate Name</th>

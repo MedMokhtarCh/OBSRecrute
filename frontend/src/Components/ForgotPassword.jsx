@@ -4,10 +4,11 @@ import { forgotPassword, clearAllUpdateProfileErrors } from "../store/Slices/upd
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { MdOutlineMailOutline } from "react-icons/md";
-
+import { IoArrowBackOutline } from "react-icons/io5";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
+   const navigateTo = useNavigate();
   const navigate = useNavigate();
   const { forgotPasswordSuccess, forgotPasswordError } = useSelector((state) => state.updateProfile);
 
@@ -31,6 +32,10 @@ const ForgotPassword = () => {
   return (
     <section className="authPage">
       <div className="container">
+         {/* HEADER */}
+                      <IoArrowBackOutline color="black" size={24} onClick={() => {
+                        navigateTo("/login")}
+                       } />
         <div className="header">
           <h3>Enter your email to reset password</h3>
         </div>
@@ -43,6 +48,12 @@ const ForgotPassword = () => {
                            placeholder="youremail@gmail.com"
                            value={email}
                            onChange={(e) => setEmail(e.target.value)}
+                           style={{ 
+                            border: "none", 
+                            borderBottom: "1px solid #ccc", 
+                            outline: "none", 
+                            backgroundColor: "transparent" 
+                          }}
                          />
                          <MdOutlineMailOutline />
                        </div>

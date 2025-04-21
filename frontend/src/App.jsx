@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
@@ -25,7 +25,8 @@ import MyJobs from './Components/MyJobs';
 import Applications from './components/Applications';
 import MyApplications from './Components/MyApplications';
 import JobDetailsDashboard from './Components/JobdetailsDashboard';
-import './App.css';
+
+/*import './App.css';*/
 import ForgotPassword from './Components/ForgotPassword';
 import ResetPassword from './Components/ResetPassword';
 import FavoriteJobs from './Pages/FavoriteJobs';
@@ -50,6 +51,7 @@ const App = () => {
           <Route path='/EditJob/:jobId' element={<JobEdit />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+      
           <Route path="/forgot-password" element={<ForgotPassword/>} />
           <Route path="/reset-password" element={<ResetPassword/>} />
 

@@ -17,7 +17,7 @@ import {
   FaCheckCircle,
   FaTimesCircle
 } from "react-icons/fa";
-
+import '../styles/Applications.css'
 const Applications = () => {
   const { applications, loading, error, message } = useSelector(
     (state) => state.applications
@@ -110,6 +110,7 @@ const Applications = () => {
         <h1 style={headerStyle}>📭 No applications received yet.</h1>
       ) : (
         <>
+        
           <h3 style={headerStyle}>📋 Applications For Your Jobs</h3>
           <div style={applicationsContainerStyle}>
             {applications.map((element) => (
@@ -143,7 +144,7 @@ const Applications = () => {
                   <Link to={element.jobSeekerInfo?.coverLetter?.url} style={buttonStyle} target="_blank">
                     📝 View Cover Letter
                   </Link>
-                  <button
+                  <Link
     onClick={() => handleDeleteApplication(element._id)}
    
     style={{
@@ -152,10 +153,11 @@ const Applications = () => {
       border: "none",
       cursor: "pointer",
       fontSize: "18px",
+      textDecoration: "none"
     }}
   >
     🗑️
-  </button>
+  </Link>
                 </div>
               </div>
             ))}
@@ -170,8 +172,7 @@ const containerStyle = {
   padding: "20px 20px",
   margin: "0 auto",
   maxWidth: "1000px",
-  backgroundColor: "#f0f9fc",
-  borderRadius: "13px",
+ 
   textAlign: "center",
 };
 
@@ -182,12 +183,14 @@ const applicationsContainerStyle = {
 };
 
 const cardStyle = {
-  backgroundColor: "#ffffff",
-  padding: "20px",
+  backgroundColor: "#f0f9fc",
+  padding: "16px",  // Réduit le padding pour plus de compacité
   borderRadius: "12px",
-  boxShadow: "0 6px 18px rgba(0, 0, 0, 0.05)",
+  
   textAlign: "left",
   transition: "transform 0.2s ease",
+  maxWidth: "400px", // Définit une largeur maximale pour la carte
+  
 };
 
 const headerStyle = {
@@ -198,7 +201,7 @@ const headerStyle = {
 };
 
 const textStyle = {
-  fontSize: "0.8rem",
+  fontSize: "1rem",
   marginBottom: "10px",
   color: "#4b5563",
   lineHeight: "1.5",
@@ -230,7 +233,7 @@ const selectStyle = {
 
 const buttonWrapperStyle = {
   display: "flex",
-  justifyContent: "space-between",
+  
   marginTop: "20px",
   flexWrap: "wrap",
   gap: "10px",

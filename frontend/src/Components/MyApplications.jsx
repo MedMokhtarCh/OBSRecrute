@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react"; 
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -9,10 +9,14 @@ import {
   fetchJobSeekerApplications,
 } from "../store/Slices/applicationSlice";
 import Spinner from "./Spinner";
-import { FaBriefcase, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaEye } from "react-icons/fa"; // Ajout de l'icône FaEye
+import Swal from "sweetalert2";
+import { FaBriefcase, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaEye } from "react-icons/fa";
 
 const MyApplications = () => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  
   const { user, isAuthenticated } = useSelector((state) => state.user);
+
   const { loading, error, applications, message } = useSelector(
     (state) => state.applications
   );
@@ -34,57 +38,52 @@ const MyApplications = () => {
     }
   }, [dispatch, error, message]);
 
-  const handleDeleteApplication = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "This application will be deleted.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(deleteApplication(id))
-          .then(() => {
-            Swal.fire("Deleted!", "The application has been deleted.", "success");
-          })
-          .catch(() => {
-            Swal.fire("Error", "Could not delete the application.", "error");
-          });
-      }
-    });
-  };
-
+const handleDeleteApplication = (id) => {
+     Swal.fire({
+       title: "Are you sure?",
+       text: "This application will be deleted.",
+       icon: "warning",
+       showCancelButton: true,
+       confirmButtonColor: "#d33",
+       cancelButtonColor: "#3085d6",
+       confirmButtonText: "Yes, delete it!",
+     }).then((result) => {
+       if (result.isConfirmed) {
+         dispatch(deleteApplication(id))
+           .then(() => {
+             Swal.fire("Deleted!", "The application has been deleted.", "success");
+           })
+           .catch(() => {
+             Swal.fire("Error", "Could not delete the application.", "error");
+           });
+       }
+     });
+   };
+  // Adjust styles dynamically based on window width
+  
   const containerStyle = {
-    padding: "20px",
+    padding: "20px 20px",
     margin: "0 auto",
-    maxWidth: "1200px",
-    backgroundColor: "#f4f7fc",
-    borderRadius: "12px",
+    maxWidth: "1000px",
+   
     textAlign: "center",
   };
-
+  const applicationsContainerStyle = {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+    gap: "24px",
+  };
+  
   const cardStyle = {
-    backgroundColor: "#ffffff",
-    padding: "24px",
+    backgroundColor: "#f0f9fc",
+    padding: "16px",  // Réduit le padding pour plus de compacité
     borderRadius: "12px",
-    boxShadow: "0 6px 12px rgba(0, 0, 0, 0.08)",
-    marginBottom: "24px",
+    
     textAlign: "left",
-    display: "flex",
-    flexDirection: "column",
-    gap: "12px",
-    transition: "transform 0.2s ease-in-out",
+    transition: "transform 0.2s ease",
+    maxWidth: "400px", // Définit une largeur maximale pour la carte
+    
   };
-
-  const headerStyle = {
-    fontSize: "2rem",
-    fontWeight: "600",
-    marginBottom: "30px",
-    color: "#222",
-  };
-
   const subSecStyle = {
     fontSize: "1rem",
     marginBottom: "8px",
@@ -93,61 +92,114 @@ const MyApplications = () => {
     alignItems: "center",
     gap: "8px",
   };
-
+  const headerStyle = {
+    fontSize: "Arem",
+    fontWeight: "600",
+    marginBottom: "50px",
+    color: "#1f2937",
+  };
+  
+  const textStyle = {
+    fontSize: "1rem",
+    marginBottom: "10px",
+    color: "#4b5563",
+    lineHeight: "1.5",
+  };
+  
+  const statusWrapperStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    marginBottom: "15px",
+    marginTop: "10px",
+  };
+  
+  const labelStyle = {
+    fontWeight: "600",
+    color: "#1f2937",
+  };
+  
+  const selectStyle = {
+    padding: "8px 12px",
+    borderRadius: "6px",
+    border: "1px solidrgb(84, 121, 165)",
+    fontSize: "14px",
+    backgroundColor: "#f8fafc",
+    color: "#1e293b",
+    outline: "none",
+    cursor: "pointer",
+  };
+  
   const buttonWrapperStyle = {
     display: "flex",
+    
+    marginTop: "20px",
     flexWrap: "wrap",
-    gap: "12px",
-    marginTop: "16px",
+    gap: "10px",
   };
-
+  
   const buttonStyle = {
-    padding: "10px 18px",
-    backgroundColor: "#0288d1",
-    color: "#fff",
-    border: "none",
-    borderRadius: "6px",
+    backgroundColor: "#e3f2fd",
+    color: "#0077b6",
+    border: "1px solidrgb(27, 127, 174)",
+    borderRadius: "8px",
+    padding: "8px 12px",
     cursor: "pointer",
     textDecoration: "none",
+    fontSize: "14px",
+    fontWeight: "500",
+    transition: "all 0.2s ease-in-out",
   };
-
+  
   const outlineButtonStyle = {
-    padding: "10px 18px",
-    backgroundColor: "#fff",
-    color: "#0288d1",
-    border: "2px solid #0288d1",
-    borderRadius: "6px",
+    color: "#d32f2f",
+    backgroundColor: "transparent",
+    border: "none",
+    fontSize: "18px",
     cursor: "pointer",
+    transition: "color 0.2s ease",
   };
+  
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
-    <>
+    <div  style={containerStyle}>
       {loading ? (
         <Spinner />
       ) : applications && applications.length <= 0 ? (
-        <h1 style={{ fontSize: "1.4rem", fontWeight: "600" }}>
+        <h1 style={headerStyle}>
           📭 You have not applied for any job.
         </h1>
       ) : (
+       
         <div style={containerStyle}>
           <h3 style={headerStyle}>📂 My Applications</h3>
-          <div className="applications_container">
+          <div style={applicationsContainerStyle}>
             {applications.map((element) => (
-              <div style={cardStyle} key={element._id} className="application-card">
+              <div style={cardStyle} key={element._id} >
                 <p style={subSecStyle}>
-                  
-                  
-                  <p style={subSecStyle}><FaBriefcase /> <strong>Job:</strong> {element.jobInfo.jobTitle}</p>
-                  <Link to={`/jobDetails/${element.jobInfo.jobId}`} style={{ marginLeft: "8px" }}>
-                    <FaEye style={{ color: "#0288d1", fontSize: "1.2rem" }} /> {/* Icône de l'œil */}
-                  
+                  <FaBriefcase /> <strong>Job:</strong> {element.jobInfo.jobTitle}
+                  <Link to={`/dashboard/jobDetails/${element.jobInfo.jobId}`} style={{ marginLeft: "8px" }}>
+                    <FaEye style={{ color: "#0288d1", fontSize: "1.2rem" }} />
                   </Link>
                 </p>
 
-                <p style={subSecStyle}><FaUser /> <strong>Name:</strong> {element.jobSeekerInfo.name}</p>
-                <p style={subSecStyle}><FaEnvelope /> <strong>Email:</strong> {element.jobSeekerInfo.email}</p>
-                <p style={subSecStyle}><FaPhone /> <strong>Phone:</strong> {element.jobSeekerInfo.phone}</p>
-                <p style={subSecStyle}><FaMapMarkerAlt /> <strong>Address:</strong> {element.jobSeekerInfo.address}</p>
+                <p style={textStyle}>👤 <strong>Applicant:</strong> {element.jobSeekerInfo.name}</p>
+                <p style={textStyle}>✉️ <strong>Email:</strong> {element.jobSeekerInfo.email}</p>
+                <p style={textStyle}>📞 <strong>Phone:</strong> {element.jobSeekerInfo.phone}</p>
+                <p style={textStyle}>📍 <strong>Address:</strong> {element.jobSeekerInfo.address}</p>
+                
 
                 <p style={subSecStyle}>
                   <strong>Status:</strong>
@@ -170,46 +222,35 @@ const MyApplications = () => {
                   </span>
                 </p>
 
-                <div style={buttonWrapperStyle}>
-                  <button
-                    style={outlineButtonStyle}
+                 <div style={buttonWrapperStyle}>
+                                 
+                                  <Link to={element.jobSeekerInfo?.resume?.url} style={buttonStyle} target="_blank">
+                                    📄 View Resume
+                                  </Link>
+                                  <Link to={element.jobSeekerInfo?.coverLetter?.url} style={buttonStyle} target="_blank">
+                                    📝 View Cover Letter
+                                  </Link>
+                                  <Link
                     onClick={() => handleDeleteApplication(element._id)}
+                   
+                    style={{
+                      backgroundColor: "transparent",
+                      color: "#f44336",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: "18px",
+                      textDecoration: "none"
+                    }}
                   >
-                    ❌ Delete
-                  </button>
-
-                  {element.jobSeekerInfo.resume.url ? (
-                    <a
-                      href={element.jobSeekerInfo.resume.url}
-                      style={buttonStyle}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      📄 Resume
-                    </a>
-                  ) : (
-                    <span>📄 No resume</span>
-                  )}
-
-                  {element.jobSeekerInfo.coverLetter.url ? (
-                    <a
-                      href={element.jobSeekerInfo.coverLetter.url}
-                      style={buttonStyle}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      📝 Cover Letter
-                    </a>
-                  ) : (
-                    <span>📝 No cover letter</span>
-                  )}
-                </div>
+                    🗑️
+                  </Link>
+                                </div>
               </div>
             ))}
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -71,6 +71,9 @@ const updateProfileSlice = createSlice({
       state.resetPasswordLoading = false;
       state.resetPasswordError = action.payload;
     },
+    clearResetPasswordSuccess: (state) => {
+      state.resetPasswordSuccess = null;
+    },
 
     profileResetAfterUpdate(state) {
       state.error = null;
@@ -171,6 +174,10 @@ export const resetPassword = (data) => async (dispatch) => {
 
 export const clearAllUpdateProfileErrors = () => (dispatch) => {
   dispatch(updateProfileSlice.actions.profileResetAfterUpdate());
+};
+
+export const clearResetPasswordSuccess = () => (dispatch) => {
+  dispatch(updateProfileSlice.actions.clearResetPasswordSuccess());
 };
 
 export default updateProfileSlice.reducer;

@@ -1,0 +1,88 @@
+.howItWorks {
+    padding: 4rem 2rem;
+    background-color: #f0f4f8;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .howItWorks h3 {
+    font-size: 2.5rem;
+    color: #1a1a1a;
+    margin-bottom: 2rem;
+    position: relative;
+    font-weight: bold;
+  }
+  
+  .howItWorks h3::after {
+    content: "";
+    width: 60px;
+    height: 4px;
+    background: #0077ff;
+    display: block;
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+  }
+  
+  .howItWorks .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 2rem;
+  }
+  
+  .howItWorks .card {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    text-align: left;
+  }
+  
+  .howItWorks .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .howItWorks .icon {
+    font-size: 2.8rem;
+    color: #0077ff;
+    margin-bottom: 1rem;
+  }
+  
+  .howItWorks .card h4 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+  }
+  
+  .howItWorks .card p {
+    font-size: 1rem;
+    color: #444;
+    line-height: 1.6;
+  }
+  .howItWorks .container .card .icon {
+    width: fit-content;
+    display: flex;
+    background: #111;
+    padding: 10px;
+    border-radius: 100%;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+  }
+  
+  .howItWorks .container .card .icon svg {
+    font-size: 40px;
+    color: #fff;
+  }
+  .howItWorks .container .card:hover .icon {
+    background: #fff;
+    transition: 0.3s;
+  }
+  .howItWorks .container .card:hover .icon svg {
+    color: #111;
+  }
+  

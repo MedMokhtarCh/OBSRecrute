@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { FaUserEdit } from "react-icons/fa";
 import { FaPlus, FaMinus } from "react-icons/fa";
-
 import {
   clearAllUpdateProfileErrors,
   updateProfile,
 } from "../store/Slices/updateProfileSlice";
 import { getUser } from "../store/Slices/userSlice";
-import FieldsArray from "../data/fields";
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBriefcase, FaBuilding } from "react-icons/fa";
 
+import '../styles/UpdateProfile.css'
 const UpdateProfile = () => {
   const dispatch = useDispatch();
   
@@ -24,20 +22,17 @@ const UpdateProfile = () => {
   const [email, setEmail] = useState(user?.email || "");
   const [phone, setPhone] = useState(user?.phone || "");
   const [address, setAddress] = useState(user?.address || "");
-  const [role, setRole] = useState(user?.role || "");
-  const [firstField, setFirstField] = useState(user?.fieldChoices?.firstChoice || "");
-const [SecondField, setSecondField] = useState(user?.fieldChoices?.SecondChoice || "");
-
   const [companyName, setCompanyName] = useState(user?.companyName || "");
   const [companyProfileDescription, setCompanyProfileDescription] = useState(user?.companyProfile?.description || "");
   const [companyProfileSector, setCompanyProfileSector] = useState(user?.companyProfile?.sector || "");
   const [companyProfileLocation, setCompanyProfileLocation] = useState(user?.companyProfile?.location || "");
-  
+  const [companyLogo, setcompanyLogo] = useState(user?.companyLogo || null);
+  const [imagePreviewlogo, setImagePreviewlogo] = useState(user?.companyLogo?.url || null);
   const [diplomas, setDiplomas] = useState(user?.diplomas || [{ title: "", institution: "", year: "", file: null }]);
+  const [certifications, setcertifications] = useState(user?.certifications || [{ title: "", year: "" }]);
   const [technicalSkills, setTechnicalSkills] = useState(user?.technicalSkills || [""]);
   const [softSkills, setSoftSkills] = useState(user?.softSkills || [""]);
   const [languages, setLanguages] = useState(user?.languages || [{ name: "", level: "" }]);
-  
   const [education, setEducation] = useState(user?.education || [{ degree: "", school: "", startYear: "", endYear: "" }]);
   const [experiences, setExperiences] = useState(user?.experiences || [{ jobTitle: "", company: "", description: "", startDate: "", endDate: "" }]);
   const [profilePicture, setProfilePicture] = useState(user?.profilePicture || null);
@@ -51,22 +46,19 @@ const [SecondField, setSecondField] = useState(user?.fieldChoices?.SecondChoice 
       setEmail(user.email || "");
       setPhone(user.phone || "");
       setAddress(user.address || "");
-      setRole(user.role||"");
-      setFirstField(user.fieldChoices?.firstChoice || "");
-      setSecondField(user.fieldChoices?.SecondChoice || "");
       setCompanyName(user.companyName || "");
       if (user.companyProfile) {
         setCompanyProfileDescription(user.companyProfile.description || "");
         setCompanyProfileSector(user.companyProfile.sector || "");
         setCompanyProfileLocation(user.companyProfile.location || "");
-        
-
       }
+      setcompanyLogo(user?.companyLogo || null);
+      setImagePreviewlogo(user?.companyLogo?.url|| null);
       setDiplomas(user?.diplomas || [{ title: "", institution: "", year: "", file: null }]);
+      setcertifications(user?.certifications || [{ title: "", year: ""}]);
       setTechnicalSkills(user?.technicalSkills || [""]);
       setSoftSkills(user?.softSkills || [""]);
       setLanguages(user?.languages || [{ name: "", level: "" }]);
-     
       setEducation(user?.education || [{ degree: "", school: "", startYear: "", endYear: "" }]);
       setExperiences(user?.experiences || [{ jobTitle: "", company: "", description: "", startDate: "", endDate: "" }]);
       setProfilePicture(user?.profilePicture || null);
@@ -83,37 +75,66 @@ const [SecondField, setSecondField] = useState(user?.fieldChoices?.SecondChoice 
   const handleUpdateProfile = () => {
     const formData = new FormData();
   
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("phone", phone);
-    formData.append("address", address);
-    formData.append("role", role);
-    
-    if (profilePicture && profilePicture !== user?.profilePicture) {
+    if (name !== user?.name) formData.append("name", name);
+    if (email !== user?.email) formData.append("email", email);
+    if (phone !== user?.phone) formData.append("phone", phone);
+    if (address !== user?.address) formData.append("address", address);
+    if (profilePicture instanceof File) {
       formData.append("profilePicture", profilePicture);
     }
-
+    
+    
   
     if (user?.role === "Employer") {
-      formData.append("companyName", companyName);
-      formData.append("companyProfile.description", companyProfileDescription);
-      formData.append("companyProfile.sector", companyProfileSector);
-      formData.append("companyProfile.location", companyProfileLocation);
+      if (companyName !== user?.companyName) formData.append("companyName", companyName);
+      if (companyProfileDescription !== user?.companyProfile?.description)
+        formData.append("companyProfile.description", companyProfileDescription);
+      if (companyProfileSector !== user?.companyProfile?.sector)
+        formData.append("companyProfile.sector", companyProfileSector);
+      if (companyProfileLocation !== user?.companyProfile?.location)
+        formData.append("companyProfile.location", companyProfileLocation);
+  
+      if (companyLogo instanceof File) {
+        formData.append("companyLogo", companyLogo);
+      }
+      
     }
   
     if (user?.role === "Job Seeker") {
-    formData.append("diplomas", JSON.stringify(diplomas));
-    formData.append("technicalSkills", JSON.stringify(technicalSkills));
-    formData.append("softSkills", JSON.stringify(softSkills));
-    formData.append("languages", JSON.stringify(languages));
-    formData.append("education", JSON.stringify(education));
-    formData.append("experiences", JSON.stringify(experiences));
-    formData.append("firstChoice", firstField);
-    formData.append("SecondChoice", SecondField);
-  }
+      const fields = [
+        { key: "diplomas", value: diplomas },
+        { key: "certifications", value: certifications },
+        { key: "technicalSkills", value: technicalSkills },
+        { key: "softSkills", value: softSkills },
+        { key: "languages", value: languages },
+        { key: "education", value: education },
+        { key: "experiences", value: experiences },
+      ];
+  
+      fields.forEach(({ key, value }) => {
+        const originalValue = JSON.stringify(user?.[key] || []);
+        const newValue = JSON.stringify(value);
+        if (newValue !== originalValue) {
+          formData.append(key, newValue);
+        }
+      });
+    }
+  
+    if ([...formData.keys()].length === 0) {
+      Swal.fire({
+        title: "Aucun changement détecté",
+        text: "Vous devez modifier au moins un champ avant de soumettre.",
+        icon: "info",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+    
     dispatch(updateProfile(formData));
   };
   
+
+
 const addEducation = () => setEducation([...education, { degree: "", school: "", startYear: "", endYear: "" }]);
 const removeEducation = (index) => setEducation(education.filter((_, i) => i !== index));
 const handleEducationChange = (index, field, value) => {
@@ -131,6 +152,18 @@ const handleEducationChange = (index, field, value) => {
     );
     setDiplomas(updatedDiplomas);
   };
+
+
+  const addCertifications = () => setcertifications([...certifications, { title: "", year: "" }]);
+  const removecertifications = (index) => setcertifications(certifications.filter((_, i) => i !== index));
+  const handlecertificationsChange = (index, field, value) => {
+    const updatedcertifications = certifications.map((cert, i) => 
+      i === index ? { ...cert, [field]: value } : cert
+    );
+   setcertifications(updatedcertifications);
+  };
+
+
   const addLanguage = () => setLanguages([...languages, { name: "", level: ""}]);
   const removeLanguage = (index) => setLanguages(languages.filter((_, i) => i !== index));
   const handleLanguageChange = (index, field, value) => {
@@ -141,11 +174,9 @@ const handleEducationChange = (index, field, value) => {
   };
 
   const addTechnicalSkill = () => setTechnicalSkills([...technicalSkills, ""]);
-
 const removeTechnicalSkill = (index) => setTechnicalSkills(
   technicalSkills.filter((_, i) => i !== index)
 );
-
 const handleTechnicalSkillChange = (index, value) => {
   const updatedSkills = technicalSkills.map((skill, i) =>
     i === index ? value : skill
@@ -155,9 +186,7 @@ const handleTechnicalSkillChange = (index, value) => {
 
   
   const addSoftSkill = () => setSoftSkills([...softSkills, ""]);
-  
   const removeSoftSkill = (index) => setSoftSkills(softSkills.filter((_, i) => i !== index));
-  
   const handleSoftSkillChange = (index, value) => {
     const updatedSkills = softSkills.map((skill, i) => 
       i === index ? value : skill
@@ -174,6 +203,9 @@ const handleTechnicalSkillChange = (index, value) => {
     );
     setExperiences(updatedExperiences);
   };
+
+
+
   // Handle profile picture change
   const handleProfilePictureChange = (event) => {
     const file = event.target.files[0];
@@ -183,27 +215,48 @@ const handleTechnicalSkillChange = (index, value) => {
     }
   };
 
-  
+  const handlecompanyLogoChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+     setcompanyLogo(file);
+      setImagePreviewlogo(URL.createObjectURL(file)); // Preview the image
+    }
+  };
 
   // Handle errors and successful update
   useEffect(() => {
-    if (error) {
-      toast.error(error);
-      dispatch(clearAllUpdateProfileErrors());
-    }
+     if (error) {
+          Swal.fire({
+            title: "Error during updating profile",
+            text: error,
+            icon: "error",
+            confirmButtonText: "Close",
+          });
+          dispatch(clearAllUpdateProfileErrors());
+        }
     if (isUpdated) {
-      toast.success("Profile Updated.");
-      dispatch(getUser());
-      dispatch(clearAllUpdateProfileErrors());
+      Swal.fire({
+              title: "profile updated",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1600,
+            }).then(() => {
+
+              /*navigateTo("/dashboard/update-profile");*/
+              dispatch(getUser());
+              dispatch(clearAllUpdateProfileErrors());
+            });
+     
     }
   }, [dispatch, error, isUpdated]);
 
+
   return (
+    <>
     <div className="account_components">
 
       <h3>Update Profile</h3>
 
-      {/* Profile Picture Section */}
       <div
   style={{
     display: "flex",
@@ -219,8 +272,7 @@ const handleTechnicalSkillChange = (index, value) => {
     {imagePreview ? (
       <img
         src={imagePreview}
-        alt="Profile"
-        className="profile-picture-preview"
+        alt="Aperçu de la photo de profil"
         style={{
           width: "120px",
           height: "120px",
@@ -232,9 +284,8 @@ const handleTechnicalSkillChange = (index, value) => {
       <p>No profile picture</p>
     )}
 
-    {/* Icône d'édition */}
     <label
-      htmlFor="profilePictureInput"
+      htmlFor="profilePicture"
       style={{
         position: "absolute",
         bottom: "0",
@@ -244,14 +295,15 @@ const handleTechnicalSkillChange = (index, value) => {
         padding: "8px",
         cursor: "pointer",
         boxShadow: "0 0 5px rgba(0,0,0,0.3)",
+        transform: "translate(10%, 10%)", // Pour un meilleur alignement visuel
       }}
     >
       <FaUserEdit size={18} color="#000" />
     </label>
 
     <input
-      id="profilePictureInput"
       type="file"
+      id="profilePicture"
       accept="image/*"
       onChange={handleProfilePictureChange}
       style={{ display: "none" }}
@@ -259,47 +311,39 @@ const handleTechnicalSkillChange = (index, value) => {
   </div>
 </div>
 
+
+
       {/* Basic Information */}
       <div>
-        <h3><FaUser /> Full Name</h3>
+        <label ><FaUser /> Full Name</label>
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
       </div>
 
       <div>
-        <h3><FaEnvelope /> Email Address</h3>
+        <label ><FaEnvelope /> Email Address</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
       </div>
 
       <div>
-        <h3><FaPhone /> Phone Number</h3>
+        <label><FaPhone /> Phone Number</label>
         <input type="number" value={phone} onChange={(e) => setPhone(e.target.value)} />
       </div>
 
       <div>
-        <h3><FaMapMarkerAlt /> Address</h3>
+        <label ><FaMapMarkerAlt /> Address</label>
         <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
       </div>
 
+
+
+
       {/* Job Seeker-specific fields */}
       {user?.role === "Job Seeker" && (
-        <div>
-        <div>
-        <h3><FaBriefcase /> Preferred Job Fields</h3>
-    <div style={{ display: "flex", gap: "10px" }}>
-      <select value={firstField} onChange={(e) => setFirstField(e.target.value)}>
-        {FieldsArray.map((field, index) => <option key={index} value={field}>{field}</option>)}
-      </select>
-      <select value={SecondField} onChange={(e) => setSecondField(e.target.value)}>
-        {FieldsArray.map((field, index) => <option key={index} value={field}>{field}</option>)}
-      </select>
-          </div>
-          <div>
-          <div>
-
-          <div>
-  <h3>Languages</h3>
-  {languages.map((lang, index) => (
-        <div key={index}>
+       <>
+                <div>
+               <label style={{ fontSize:"1.5rem" , color:"#04ADE6"}}>Languages</label>
+              {languages.map((lang, index) => (
+            <div key={index}>
           <label> language number {index + 1} </label>
           <input
             type="text"
@@ -313,19 +357,15 @@ const handleTechnicalSkillChange = (index, value) => {
             value={lang.level}
             onChange={(e) => handleLanguageChange(index, 'level', e.target.value)}
           />
-          
-      
           <FaMinus onClick={() => removeLanguage(index)}/>
-
         </div>
       ))}
-   
       <FaPlus onClick={addLanguage} /> 
-     
     </div>
 
 
-  <h3>Technical Skills</h3>
+<div>
+  <label style={{ fontSize:"1.5rem" , color:"#04ADE6"}}>Technical Skills</label>
   {technicalSkills.map((skill, index) => (
     <div key={index}>
       <input
@@ -339,17 +379,14 @@ const handleTechnicalSkillChange = (index, value) => {
   
     </div>
   ))}
-
   <FaPlus onClick={addTechnicalSkill} /> 
+  </div>
 
 
- 
- 
 
-</div>
 
 <div>
-  <h3>Soft Skills</h3>
+  <label style={{ fontSize:"1.5rem" , color:"#04ADE6"}}>Soft Skills</label>
   {softSkills.map((skill, index) => (
     <div key={index}>
       <input
@@ -358,22 +395,16 @@ const handleTechnicalSkillChange = (index, value) => {
         value={skill}
         onChange={(e) => handleSoftSkillChange(index, e.target.value)}
       />
-     
       <FaMinus onClick={() => removeSoftSkill(index)}/>
-  
     </div>
   ))}
-  
     <FaPlus onClick={addSoftSkill} /> 
-
-
-  
-     
-   
 </div>
 
+
+
 <div>
-  <h3>Diplomas</h3>
+  <label style={{ fontSize:"1.5rem" , color:"#04ADE6"}}>Diplomas</label>
   {diplomas.map((diploma, index) => (
     <div key={index}>
       <input
@@ -399,14 +430,14 @@ const handleTechnicalSkillChange = (index, value) => {
     
     </div>
   ))}
- 
     <FaPlus onClick={addDiploma} />
- 
 </div>
 
  
-  <h3>Education</h3>
 
+
+ <div>
+  <label style={{ fontSize:"1.5rem" , color:"#04ADE6"}}>Education</label>
   {education.map((edu, index) => (
     <div key={index}>
       <input
@@ -434,16 +465,17 @@ const handleTechnicalSkillChange = (index, value) => {
         onChange={(e) => handleEducationChange(index, "endYear", e.target.value)}
       />
        <FaMinus onClick={() => removeEducation(index)}/>
-     
     </div>
   ))}
-  
   <FaPlus onClick={addEducation} />
-  
-</div>
+  </div>
+
+
+
+
 
     <div>
-    <h3>Experiences</h3>
+    <label style={{ fontSize:"1.5rem" , color:"#04ADE6"}}>Experiences</label>
     {experiences.map((experience, index) => (
   <div key={index}>
     <label>Experience number {index + 1}</label>
@@ -476,25 +508,46 @@ const handleTechnicalSkillChange = (index, value) => {
       value={formatDateForInput(experience.endDate)}
       onChange={(e) => handleExperienceChange(index, 'endDate', e.target.value)}
     />
-   
     <FaMinus onClick={() => removeExperience(index)}/>
   </div>
 ))}
-
-     
       <FaPlus onClick={addExperience} />
     </div>
-      
- 
-        </div>
-        </div>
 
-      )}
+
+
+    <div>
+  <label style={{ fontSize:"1.5rem" , color:"#04ADE6"}}>Certifications</label>
+  {certifications.map((cert, index) => (
+    <div key={index}>
+      <input
+        type="text"
+        placeholder="Title"
+        value={certifications.title}
+        onChange={(e) => handlecertificationsChange(index, "title", e.target.value)}
+      />
+      <input
+        type="number"
+        placeholder="Year"
+        value={certifications.year}
+        onChange={(e) => handlecertificationsChange(index, "year", e.target.value)}
+      />
+        <FaMinus onClick={() => removecertifications(index)}/>
+    </div>
+  ))}
+    <FaPlus onClick={addCertifications} />
+</div> 
+
+</>  )}
+
+
+
+
 
 {/* Employer-specific fields */}
 {user?.role === "Employer" && (
   <div className="company-profile-section">
-    <h3><FaBuilding /> Company Information</h3>
+    <label><FaBuilding /> Company Information</label>
 
     <div>
       <label>Company Name</label>
@@ -508,9 +561,12 @@ const handleTechnicalSkillChange = (index, value) => {
     <div>
       <label>Description</label>
       <textarea
-        value={companyProfileDescription}
-        onChange={(e) => setCompanyProfileDescription(e.target.value)}
-      />
+  rows={4} // définit la hauteur
+  cols={50} // définit la largeur
+  value={companyProfileDescription}
+  onChange={(e) => setCompanyProfileDescription(e.target.value)}
+/>
+
     </div>
 
     <div>
@@ -531,22 +587,72 @@ const handleTechnicalSkillChange = (index, value) => {
       />
     </div>
 
+    <div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "20px",
+  }}
+>
+  <div
+    className="profile-picture-container"
+    style={{ position: "relative", display: "inline-block" }}
+  >
+    {imagePreviewlogo ? (
+      <img
+        src={imagePreviewlogo}
+        alt="Aperçu du logo"
+        style={{
+          width: "120px",
+          height: "120px",
+          borderRadius: "50%",
+          objectFit: "cover",
+        }}
+      />
+    ) : (
+      <p>No company logo picture</p>
+    )}
 
+    <label
+      htmlFor="companyLogo"
+      style={{
+        position: "absolute",
+        bottom: "0",
+        right: "0",
+        backgroundColor: "#fff",
+        borderRadius: "50%",
+        padding: "8px",
+        cursor: "pointer",
+        boxShadow: "0 0 5px rgba(0,0,0,0.3)",
+      }}
+    >
+      <FaUserEdit size={18} color="#000" />
+    </label>
+
+    <input
+      type="file"
+      id="companyLogo"
+      accept="image/*"
+      onChange={handlecompanyLogoChange}
+      style={{ display: "none" }}
+    />
+  </div>
+</div>
 
 
   </div>
 )}
 
       {/* Save Changes Button */}
-      <button
-  onClick={handleUpdateProfile}
-  
->
-  Update Profile
-</button>
+     
 
 
     </div>
+    <div className="submit-button-container">
+    <button onClick={handleUpdateProfile}>Update Profile</button>
+  </div>
+   </>
   );
 };
 

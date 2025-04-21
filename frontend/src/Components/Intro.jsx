@@ -1,5 +1,6 @@
 import React from "react";
 import CarouselComponent from "./CarouselComponent";
+import '../styles/Intro.css';
 
 const Intro = () => {
   return (
