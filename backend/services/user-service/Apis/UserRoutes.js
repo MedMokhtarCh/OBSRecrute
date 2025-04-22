@@ -11,6 +11,7 @@ import {
   resetPassword,
   addFavoriteJob,
   removeFavoriteJob,
+  getUserById,
 } from "../controllers/userController.js";
 import {
   isAdmin,
@@ -27,6 +28,7 @@ router.put("/update/password", isAuthenticated, updatePassword);
 router.delete("/deleteUser/:id", isAuthenticated, isAdmin, deleteUser);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
+router.get("/getUser/:id", getUserById);
 router.post(
   "/add-favorite",
   isAuthenticated,

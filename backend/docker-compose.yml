@@ -47,6 +47,22 @@ services:
       - mongo
       - rabbitmq
 
+  notification-service:
+    build:
+      context: ./services/notification-service
+      dockerfile: Dockerfile
+    container_name: notification-service
+    ports:
+      - "4004:4004"
+    restart: always
+    volumes:
+      - ./services/notification-service:/app
+    command: ["npm", "run", "dev"]
+    depends_on:
+      - mongo
+      - rabbitmq
+    
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq

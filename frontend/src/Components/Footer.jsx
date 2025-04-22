@@ -7,6 +7,7 @@ import {
   FaSquareInstagram,
   FaYoutube,
   FaLinkedin,
+  FaGithub
 } from "react-icons/fa6";
 import '../styles/Footer.css';
 
@@ -46,14 +47,15 @@ const Footer = () => {
         <div>
           <h4>Follow me</h4>
           <ul>
-            <li>
-              <Link to={"/"}>
-                <span>
-                  <FaSquareXTwitter />
-                </span>
-                <span>Twitter (X)</span>
-              </Link>
-            </li>
+          <li>
+  <Link to="https://github.com/BenSalemOns/">
+    <span>
+      <FaGithub />
+    </span>
+    <span>GitHub</span>
+  </Link>
+</li>
+
             <li>
               <Link to={"/"}>
                 <span>
@@ -71,7 +73,7 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link to={"/"}>
+              <Link to={"https://www.linkedin.com/in/ben-salem-ons-0843b6227/"}>
                 <span>
                   <FaLinkedin />
                 </span>

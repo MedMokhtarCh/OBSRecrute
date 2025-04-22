@@ -5,6 +5,7 @@ import {
   postApplication,
   updateApplicationStatus,
   getApplicationsByJobId,
+  getApplicationById,
 } from "../Controllers/ApplicationController.js";
 import { isAuthenticated, isAuthorized } from "../Middlewares/Authen.js";
 import express from "express";
@@ -17,6 +18,8 @@ router.post(
   isAuthorized("Job Seeker"),
   postApplication
 );
+router.get("/applications/:id", getApplicationById);
+
 router.get(
   "/employer/getall",
   isAuthenticated,

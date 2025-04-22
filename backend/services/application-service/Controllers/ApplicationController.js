@@ -4,7 +4,7 @@ import { Application } from "../database/models/applicationSchema.js";
 import { catchAsyncErrors } from "../Middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../Middlewares/error.js";
 import dotenv from "dotenv";
-
+import { publishNotification } from "../services/publisher.js";
 dotenv.config();
 
 export const postApplication = catchAsyncErrors(async (req, res, next) => {
@@ -239,11 +239,24 @@ export const getApplicationsByJobId = catchAsyncErrors(
     });
   }
 );
+export const getApplicationById = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
 
+  const application = await Application.findById(id);
+
+  if (!application) {
+    return next(new ErrorHandler("Application not found.", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    application,
+  });
+});
 export const updateApplicationStatus = catchAsyncErrors(
   async (req, res, next) => {
     const { id } = req.params;
-    const { status } = req.body; // Statut envoyé dans la requête
+    const { status } = req.body;
 
     const application = await Application.findById(id);
 
@@ -251,12 +264,10 @@ export const updateApplicationStatus = catchAsyncErrors(
       return next(new ErrorHandler("Application not found.", 404));
     }
 
-    // Vérifier que l'utilisateur est bien l'employeur concerné
     if (application.employerInfo.id.toString() !== req.user._id.toString()) {
       return next(new ErrorHandler("Unauthorized action.", 403));
     }
 
-    // Vérifier que le statut est valide
     const validStatuses = ["pending", "accepted", "rejected"];
     if (!validStatuses.includes(status)) {
       return next(new ErrorHandler("Invalid status.", 400));
@@ -264,6 +275,13 @@ export const updateApplicationStatus = catchAsyncErrors(
 
     application.status = status;
     await application.save();
+
+    //  Publier une notification
+    await publishNotification({
+      recipient: application.jobSeekerInfo.id,
+      message: `Your application status is now "${status}".`,
+      applicationId: application._id,
+    });
 
     res.status(200).json({
       success: true,

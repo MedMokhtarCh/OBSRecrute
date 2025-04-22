@@ -1,7 +1,7 @@
 import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/error.js"; // Correction de la casse du dossier
 import { Job } from "../database/models/jobSchema.js";
-
+import axios from "axios";
 export const postJob = catchAsyncErrors(async (req, res, next) => {
   const {
     title,
@@ -186,6 +186,48 @@ export const getMyJobs = catchAsyncErrors(async (req, res, next) => {
     success: true,
     myJobs,
   });
+});
+export const getJobByApplication = catchAsyncErrors(async (req, res, next) => {
+  const { applicationId } = req.params;
+
+  try {
+    const applicationResponse = await axios.get(
+      `http://localhost:4003/api/v1/Application/applications/${applicationId}`
+    );
+
+    if (
+      !applicationResponse.data ||
+      !applicationResponse.data.application ||
+      !applicationResponse.data.application.jobInfo
+    ) {
+      return next(
+        new ErrorHandler("Application not found or invalid format.", 404)
+      );
+    }
+
+    const application = applicationResponse.data.application;
+    const jobId = application.jobInfo.jobId;
+
+    const jobResponse = await axios.get(
+      `http://localhost:4002/api/v1/job/get/${jobId}`
+    );
+
+    if (!jobResponse.data || !jobResponse.data.job) {
+      return next(new ErrorHandler("Job not found.", 404));
+    }
+
+    const job = jobResponse.data.job;
+
+    res.status(200).json({
+      success: true,
+      job,
+    });
+  } catch (error) {
+    console.error("Error when calling the microservices:", error.message);
+    return next(
+      new ErrorHandler("Error fetching job and application details.", 500)
+    );
+  }
 });
 
 export const deleteJob = catchAsyncErrors(async (req, res, next) => {

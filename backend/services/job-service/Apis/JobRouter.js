@@ -6,6 +6,7 @@ import {
   getAllCompanyNames,
   getAllJobs,
   getASingleJob,
+  getJobByApplication,
   getMyJobs,
   postJob,
 } from "../controllers/jobController.js";
@@ -35,5 +36,8 @@ router.put(
   editJob
 );
 router.get("/companies", getAllCompanyNames);
-
+router.get(
+  "/applications/job/:applicationId",
+  getJobByApplication
+);
 export default router;

@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 import cloudinary from "cloudinary";
 import { errorMiddleware } from "./Middlewares/error.js";
 import ApplicationRoutes from "./Apis/ApplicationRoutes.js";
-
+import { connectPublisher } from "./services/publisher.js";
 dotenv.config();
 
 // Configurer Cloudinary
@@ -50,7 +50,7 @@ connectDB();
 
 // Middleware d'erreurs - doit être dernier
 app.use(errorMiddleware);
-
+connectPublisher();
 // Démarrer le serveur
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

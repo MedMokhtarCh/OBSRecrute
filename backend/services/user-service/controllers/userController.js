@@ -69,6 +69,21 @@ export const register = catchAsyncErrors(async (req, res, next) => {
     next(error);
   }
 });
+export const getUserById = catchAsyncErrors(async (req, res, next) => {
+  const userId = req.params.id;
+
+  // Recherche de l'utilisateur par son ID
+  const user = await User.findById(userId);
+  if (!user) {
+    return next(new ErrorHandler("user not found", 404));
+  }
+
+  // Réponse avec les données de l'utilisateur
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
 
 export const login = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
